@@ -1,0 +1,25 @@
+{
+    "name": "creof/geo-parser",
+    "type": "library",
+    "description": "Parser for geography coordinate strings",
+    "keywords": ["geography"],
+    "authors": [
+        {
+            "name": "Derek J. Lambert",
+            "email": "dlambert@dereklambert.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "doctrine/lexer": ">=1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "CrEOF\\Geo": "lib/"
+        }
+    }
+}
