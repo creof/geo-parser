@@ -246,13 +246,13 @@ class Parser
             $token = $this->lexer->lookahead;
         }
 
-        $tokenPos = (isset($token['position'])) ? $token['position'] : '-1';
-
-        $message  = 'line 0, col ' . $tokenPos . ': Error: ';
-        $message .= ('' !== $expected) ? 'Expected ' . $expected . ', got ' : 'Unexpected ';
-        $message .= (null === $this->lexer->lookahead) ? 'end of string.' : '"' . $token['value'] . '"';
-
-        $message = sprintf('[Syntax Error] %s in value "%s"', $message, $this->input);
+        $message = sprintf(
+            '[Syntax Error] line 0, col %d: Error: %s%s in value "%s"',
+            isset($token['position']) ? $token['position'] : '-1',
+            '' !== $expected ? 'Expected ' . $expected . ', got ' : 'Unexpected ',
+            null === $this->lexer->lookahead ? 'end of string.' : '"' . $token['value'] . '"',
+            $this->input
+        );
 
         throw new \UnexpectedValueException($message);
     }
