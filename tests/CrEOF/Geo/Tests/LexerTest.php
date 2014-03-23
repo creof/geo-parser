@@ -57,6 +57,18 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     {
         return array (
             array(
+                '40° 26\' 46" N',
+                array(
+                    array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),
+                    array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 2),
+                    array('value' => 26, 'type' => Lexer::T_INTEGER, 'position' => 5),
+                    array('value' => '\'', 'type' => Lexer::T_APOSTROPHE, 'position' => 7),
+                    array('value' => 46, 'type' => Lexer::T_INTEGER, 'position' => 9),
+                    array('value' => '"', 'type' => Lexer::T_QUOTE, 'position' => 11),
+                    array('value' => 'N', 'type' => Lexer::T_CARDINAL_LAT, 'position' => 13)
+                )
+            ),
+            array(
                 '40° 26\' 46" N 79° 58\' 56" W',
                 array(
                     array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),

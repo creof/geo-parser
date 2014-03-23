@@ -35,11 +35,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $input
-     * @param array  $expected
+     * @param mixed  $expected
      *
      * @dataProvider testDataSource
      */
-    public function testOne($input, array $expected)
+    public function testOne($input, $expected)
     {
         $parser = new Parser($input);
 
@@ -51,6 +51,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     public function testDataSource()
     {
         return array(
+            array(
+                '40° 26\' 46" N',
+                40.446111111111
+            ),
             array(
                 '40° 26\' 46" N 79° 58\' 56" W',
                 array(40.446111111111, -79.982222222222)

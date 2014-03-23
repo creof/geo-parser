@@ -72,6 +72,10 @@ class Parser
     {
         $x = $this->coordinate();
 
+        if (null === $this->lexer->lookahead) {
+            return $x;
+        }
+
         if ($this->lexer->isNextToken(Lexer::T_COMMA)) {
             $this->match(Lexer::T_COMMA);
         }
