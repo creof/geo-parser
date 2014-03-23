@@ -128,6 +128,10 @@ class Parser
 
         $this->match(Lexer::T_DEGREE);
 
+        if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $this->lexer->glimpse()['type']) {
+            return $degrees;
+        }
+
         $degrees += $this->minutes();
 
         return $degrees;
