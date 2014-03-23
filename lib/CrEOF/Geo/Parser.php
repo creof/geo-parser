@@ -90,13 +90,19 @@ class Parser
      */
     protected function coordinate()
     {
-        $value = $this->degrees();
+        $coordinate = $this->degrees();
 
-        if (null !== $this->cardinal || $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LONG))) {
-            $value *= $this->cardinal();
+        if ($this->cardinal > 0) {
+            return $coordinate * $this->cardinal();
         }
 
-        return $value;
+        if (null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LONG))) {
+            return $coordinate * $this->cardinal();
+        }
+
+        $this->cardinal = -1;
+
+        return $coordinate;
     }
 
     /**
