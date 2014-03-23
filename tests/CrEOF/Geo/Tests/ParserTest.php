@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Spatial\Tests\Unit\DBAL\Types;
+namespace CrEOF\Geo\Tests;
 
 use CrEOF\Geo\Parser;
 
