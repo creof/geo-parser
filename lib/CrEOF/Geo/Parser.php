@@ -111,20 +111,20 @@ class Parser
     protected function degrees()
     {
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
-            $value = $this->number();
+            $degrees = $this->number();
 
             $this->match(Lexer::T_DEGREE);
 
-            return $value;
+            return $degrees;
         }
 
-        $value = $this->number();
+        $degrees = $this->number();
 
         $this->match(Lexer::T_DEGREE);
 
-        $value += $this->minutes();
+        $degrees += $this->minutes();
 
-        return $value;
+        return $degrees;
     }
 
     /**
@@ -133,21 +133,21 @@ class Parser
     protected function minutes()
     {
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
-            $value = $this->number() / 60;
+            $minutes = $this->number() / 60;
 
             $this->match(Lexer::T_APOSTROPHE);
 
-            return $value;
+            return $minutes;
         }
 
         if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
-            $value = $this->number() / 60;
+            $minutes = $this->number() / 60;
 
             $this->match(Lexer::T_APOSTROPHE);
 
-            $value += $this->seconds();
+            $minutes += $this->seconds();
 
-            return $value;
+            return $minutes;
         }
 
         return 0;
@@ -159,11 +159,11 @@ class Parser
     protected function seconds()
     {
         if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
-            $value = $this->match(Lexer::T_INTEGER) / 3600;
+            $seconds = $this->match(Lexer::T_INTEGER) / 3600;
 
             $this->match(Lexer::T_QUOTE);
 
-            return $value;
+            return $seconds;
         }
 
         return 0;
@@ -188,24 +188,24 @@ class Parser
             $cardinal = $this->match($this->cardinal);
         }
 
-        $value = 1;
+        $sign = 1;
 
         switch (strtolower($cardinal)) {
             case 's':
-                $value = -1;
+                $sign = -1;
                 // no break
             case 'n':
                 $this->cardinal = Lexer::T_CARDINAL_LONG;
                 break;
             case 'w':
-                $value = -1;
+                $sign = -1;
                 // no break
             case 'e':
                 $this->cardinal = Lexer::T_CARDINAL_LAT;
                 break;
         }
 
-        return $value;
+        return $sign;
     }
 
     /**
