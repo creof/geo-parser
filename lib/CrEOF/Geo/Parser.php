@@ -113,12 +113,18 @@ class Parser
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             $degrees = $this->number();
 
-            $this->match(Lexer::T_DEGREE);
+            if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
+                $this->match(Lexer::T_DEGREE);
+            }
 
             return $degrees;
         }
 
         $degrees = $this->number();
+
+        if ( ! $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+            return $degrees;
+        }
 
         $this->match(Lexer::T_DEGREE);
 
