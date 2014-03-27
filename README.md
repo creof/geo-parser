@@ -1,40 +1,51 @@
-# geo-parser
+# creof/geo-parser
 
-This package contains a lexer and parser for geographic coordinate strings. I created it for my doctrine2-spatial
-package but can be used on its own.
+Lexer and parser library for geometric and geographic string values.
 
-I whipped this up in a matter of hours so there is currently no documentation. To see it in use, take a look at the
-tests in tests/CrEOF/Geo/Tests.
+This library is used in the creof/geo library.
+
+Sample code can be found in the unit tests.
 
 ## Supported Formats
 
-Both single values and tuples are supported. Samples of formats supported (spaces are ignored):
+Both single values and tuples are supported. Some samples of supported formats are below, though not every possible iteration may be explicitly specified:
 
-* 40
-* -40
-* 40°
-* -40°
-* 40° N
-* 40° S
-* 45.24
-* 45.24°
-* 45.24° S
-* 40° 26' 46" N
-* 40° N 79° W
-* 40 79
-* 40° 79°
-* 40, 79
-* 40°, 79°
-* 40° 26' 46" N 79° 58' 56" W
-* 40.4738° N, 79.553° W
-* 40.4738° S, 79.553° W
-* 40° 26.222' N 79° 58.52' E
-* 40°26.222'N 79°58.52'E
-* 40°26.222' 79°58.52'
-* 40.222° -79.5852°
-* 40.222°, -79.5852°
+1. Simple single signed values
+ * 40
+ * -40
+ * -8.543
 
-## Output
+2. Simple single signed values with degree symbol
+ * 40°
+ * -40°
+ * -5.234°
+
+3. Single unsigned values with or without degree symbol, and cardinal direction
+ * 40° N
+ * 40 S
+ * 56.242 E
+
+4. Single values of signed integer degrees with degree symbol, and decimal minutes with apostrophe
+ * 40° 26.222'
+ * -65° 32.22'
+
+5. Single values of unsigned integer degrees with degree symbol, decimal minutes with apostrophe, and cardinal direction
+ * 40° 26.222' E
+ * 65° 32.22' S
+
+6. Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer seconds with quote
+ * 40° 26' 46"
+ * -79° 58' 56"
+
+7. Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer seconds with quote, and cardinal direction
+ * 40° 26' 46" S
+ * 99° 58' 56" W
+
+8. Two of any one format separated by space(s)
+
+9. Two of any one format separated by a comma
+
+## Return
 
 The parser will return a integer/float or an array containing a pair of these values.
 
