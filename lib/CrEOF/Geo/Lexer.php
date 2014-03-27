@@ -33,18 +33,18 @@ use Doctrine\Common\Lexer\AbstractLexer;
  */
 class Lexer extends AbstractLexer
 {
-    const T_NONE          = 1;
-    const T_INTEGER       = 2;
-    const T_FLOAT         = 4;
-    const T_CARDINAL_LAT  = 5;
-    const T_CARDINAL_LONG = 6;
-    const T_COMMA         = 8;
-    const T_MINUS         = 9;
-    const T_PERIOD        = 10;
-    const T_COLON         = 11;
-    const T_APOSTROPHE    = 12;
-    const T_QUOTE         = 13;
-    const T_DEGREE        = 14;
+    const T_NONE         = 1;
+    const T_INTEGER      = 2;
+    const T_FLOAT        = 4;
+    const T_CARDINAL_LAT = 5;
+    const T_CARDINAL_LON = 6;
+    const T_COMMA        = 8;
+    const T_MINUS        = 9;
+    const T_PERIOD       = 10;
+    const T_COLON        = 11;
+    const T_APOSTROPHE   = 12;
+    const T_QUOTE        = 13;
+    const T_DEGREE       = 14;
 
     /**
      * @param string $input
@@ -91,7 +91,7 @@ class Lexer extends AbstractLexer
             case (preg_match('/[ns]/i', $value)):
                 return self::T_CARDINAL_LAT;
             case (preg_match('/[ew]/i', $value)):
-                return self::T_CARDINAL_LONG;
+                return self::T_CARDINAL_LON;
             default:
                 break;
         }

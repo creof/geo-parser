@@ -84,7 +84,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                     array('value' => '\'', 'type' => Lexer::T_APOSTROPHE, 'position' => 22),
                     array('value' => 56, 'type' => Lexer::T_INTEGER, 'position' => 24),
                     array('value' => '"', 'type' => Lexer::T_QUOTE, 'position' => 26),
-                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LONG, 'position' => 28)
+                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LON, 'position' => 28)
                 )
             ),
             array(
@@ -103,7 +103,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                     array('value' => '\'', 'type' => Lexer::T_APOSTROPHE, 'position' => 18),
                     array('value' => 56, 'type' => Lexer::T_INTEGER, 'position' => 19),
                     array('value' => '"', 'type' => Lexer::T_QUOTE, 'position' => 21),
-                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LONG, 'position' => 22)
+                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LON, 'position' => 22)
                 )
             ),
             array(
@@ -123,7 +123,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                     array('value' => '\'', 'type' => Lexer::T_APOSTROPHE, 'position' => 19),
                     array('value' => 56, 'type' => Lexer::T_INTEGER, 'position' => 20),
                     array('value' => '"', 'type' => Lexer::T_QUOTE, 'position' => 22),
-                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LONG, 'position' => 23)
+                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LON, 'position' => 23)
                 )
             ),
             array(
@@ -135,7 +135,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                     array('value' => ',', 'type' => Lexer::T_COMMA, 'position' => 11),
                     array('value' => 79.553, 'type' => Lexer::T_FLOAT, 'position' => 13),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 19),
-                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LONG, 'position' => 22)
+                    array('value' => 'W', 'type' => Lexer::T_CARDINAL_LON, 'position' => 22)
                 )
             ),
             array(

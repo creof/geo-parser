@@ -114,7 +114,7 @@ class Parser
         }
 
         // Get sign if this is first coordinate and cardinal direction is present
-        if (null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LONG))) {
+        if (null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))) {
             return $coordinate * $this->cardinal();
         }
 
@@ -264,7 +264,7 @@ class Parser
                 // no break
             case 'n':
                 // Set requirement for second coordinate
-                $this->cardinal = Lexer::T_CARDINAL_LONG;
+                $this->cardinal = Lexer::T_CARDINAL_LON;
                 break;
             case 'w':
                 // Western longitudes are negative
