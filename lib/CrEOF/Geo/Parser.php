@@ -275,10 +275,22 @@ class Parser
      * Match integer or float token and return value
      *
      * @return int|float
+     * @throws \UnexpectedValueException
      */
     protected function number()
     {
-        return $this->match(($this->lexer->isNextToken(Lexer::T_FLOAT) ? Lexer::T_FLOAT : Lexer::T_INTEGER));
+        // If next token is a float match and return it
+        if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+            return $this->match(Lexer::T_FLOAT);
+        }
+
+        // If next token is an integer match and return it
+        if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
+            return $this->match(Lexer::T_INTEGER);
+        }
+
+        // Throw exception since no match
+        throw $this->syntaxError('CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT');
     }
 
     /**
