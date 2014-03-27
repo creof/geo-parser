@@ -299,27 +299,39 @@ class Parser
     }
 
     /**
-     * Throw descriptive exception for syntax error
+     * Create exception with descriptive error message
      *
      * @param string $expected
      * @param array  $token
      *
-     * @throws \UnexpectedValueException
+     * @return \UnexpectedValueException
      */
-    protected function syntaxError($expected = '', $token = null)
+    protected function syntaxError($expected = null, $token = null)
     {
         if (null === $token) {
             $token = $this->lexer->lookahead;
         }
 
+        if (null === $expected) {
+            $expected = 'Unexpected ';
+        } else {
+            $expected = sprintf('Expected %s, got ', $expected);
+        }
+
+        if (null === $this->lexer->lookahead) {
+            $found = 'end of string.';
+        } else {
+            $found = sprintf('"%s"', $token['value']);
+        }
+
         $message = sprintf(
             '[Syntax Error] line 0, col %d: Error: %s%s in value "%s"',
             isset($token['position']) ? $token['position'] : '-1',
-            '' !== $expected ? 'Expected ' . $expected . ', got ' : 'Unexpected ',
-            null === $this->lexer->lookahead ? 'end of string.' : '"' . $token['value'] . '"',
+            $expected,
+            $found,
             $this->input
         );
 
-        throw new \UnexpectedValueException($message);
+        return new \UnexpectedValueException($message);
     }
 }
