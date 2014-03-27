@@ -24,7 +24,7 @@
 namespace CrEOF\Geo;
 
 /**
- * Parse geographic coordinates
+ * Parser for geographic coordinate strings
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
@@ -32,6 +32,8 @@ namespace CrEOF\Geo;
 class Parser
 {
     /**
+     * Original input string
+     *
      * @var string
      */
     private $input;
@@ -60,7 +62,7 @@ class Parser
      */
     public function __construct($input)
     {
-        // Save input string for any syntax error
+        // Save input string for use in messages
         $this->input = $input;
         // Create new Lexer and tokenize input string
         $this->lexer = new Lexer($input);
@@ -148,7 +150,7 @@ class Parser
     }
 
     /**
-     * Match and return degree value
+     * Match and return degrees value
      *
      * @return float|int
      */
@@ -353,15 +355,19 @@ class Parser
      * @param int $token
      *
      * @return mixed
+     * @throws \UnexpectedValueException
      */
     protected function match($token)
     {
+        // If next token isn't type specified throw error
         if ( ! $this->lexer->isNextToken($token)) {
             throw $this->syntaxError($this->lexer->getLiteral($token));
         }
 
+        // Move lexer to next token
         $this->lexer->moveNext();
 
+        // Return the token value
         return $this->lexer->token['value'];
     }
 
