@@ -48,6 +48,24 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $value);
     }
 
+    /**
+     * @param string $input
+     * @param string $message
+     *
+     * @dataProvider dataSourceBad
+     */
+    public function testBadValues($input, $message)
+    {
+        $this->setExpectedException('UnexpectedValueException', $message);
+
+        $parser = new Parser($input);
+
+        $parser->parse();
+    }
+
+    /**
+     * @return array[]
+     */
     public function testDataSource()
     {
         return array(
@@ -74,6 +92,27 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('40°26.222\' 79°58.52\'', array(40.437033333333, 79.975333333333)),
             array('40.222° -79.5852°', array(40.222, -79.5852)),
             array('40.222°, -79.5852°', array(40.222, -79.5852)),
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function dataSourceBad()
+    {
+        return array(
+            array('-40°N 79°W', '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "N" in value "-40°N 79°W"'),
+            array('40°N -79W', '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40°N -79W"'),
+            array('40N -79°W', '[Syntax Error] line 0, col 4: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40N -79°W"'),
+            array('40N 79°W', '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\Lexer::T_CARDINAL_LON, got "°" in value "40N 79°W"'),
+            array('40°N 79°S', '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\Lexer::T_CARDINAL_LON, got "S" in value "40°N 79°S"'),
+            array('40°W 79°E', '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 79°E"'),
+            array('40° 79', '[Syntax Error] line 0, col -1: Error: Expected CrEOF\Geo\Lexer::T_APOSTROPHE, got end of string. in value "40° 79"'),
+            array('40°, 79', '[Syntax Error] line 0, col -1: Error: Expected CrEOF\Geo\Lexer::T_DEGREE, got end of string. in value "40°, 79"'),
+            array('40N 79', '[Syntax Error] line 0, col -1: Error: Expected CrEOF\Geo\Lexer::T_CARDINAL_LON, got end of string. in value "40N 79"'),
+            array('40 79W', '[Syntax Error] line 0, col 5: Error: Expected end of string, got "W" in value "40 79W"'),
+            array('-40.757° 79°W', '[Syntax Error] line 0, col 14: Error: Expected end of string, got "W" in value "-40.757° 79°W"'),
+            array('40.757°N -79.567°W', '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40.757°N -79.567°W"'),
         );
     }
 }
