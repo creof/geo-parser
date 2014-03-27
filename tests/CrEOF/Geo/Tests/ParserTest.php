@@ -37,9 +37,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      * @param string $input
      * @param mixed  $expected
      *
-     * @dataProvider testDataSource
+     * @dataProvider dataSourceGood
      */
-    public function testOne($input, $expected)
+    public function testGoodValues($input, $expected)
     {
         $parser = new Parser($input);
 
@@ -66,7 +66,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function testDataSource()
+    public function dataSourceGood()
     {
         return array(
             array('40', 40),
