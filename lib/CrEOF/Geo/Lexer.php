@@ -106,7 +106,7 @@ class Lexer extends AbstractLexer
     {
         return array(
             '[nesw\'",\X]',
-            '(?:[+-]?[0-9]+)(?:[\.][0-9]+)?'
+            '(?:[0-9]+)(?:[\.][0-9]+)?'
         );
     }
 
