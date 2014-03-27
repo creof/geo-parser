@@ -77,6 +77,7 @@ class Parser
 
     /**
      * @return float|int|array
+     * @throws \UnexpectedValueException
      */
     protected function point()
     {
@@ -95,6 +96,11 @@ class Parser
 
         // Get second coordinate value
         $y = $this->coordinate();
+
+        // There should be no additional tokens
+        if (null !== $this->lexer->lookahead) {
+            throw $this->syntaxError('end of string');
+        }
 
         // Return coordinate array
         return array($x, $y);
