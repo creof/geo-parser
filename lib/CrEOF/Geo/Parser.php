@@ -47,6 +47,11 @@ class Parser
     private $cardinal;
 
     /**
+     * @var int
+     */
+    private $ascii;
+
+    /**
      * Constructor
      *
      * Setup up instance properties
@@ -155,9 +160,7 @@ class Parser
             $degrees = $this->number();
 
             // Degree float values may be followed by degree symbol
-            if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
-                $this->match(Lexer::T_DEGREE);
-            }
+            $this->ascii();
 
             // Return value
             return $degrees;
@@ -167,15 +170,15 @@ class Parser
         $degrees = $this->number();
 
         // If integer is not followed by a degree symbol this value is complete
-        if ( ! $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+        if ( ! $this->ascii()) {
             return $degrees;
         }
 
-        // Match degree symbol
-        $this->match(Lexer::T_DEGREE);
+        // Grab peek of next token since we can't array dereference result in PHP 5.3
+        $glimpse = $this->lexer->glimpse();
 
-        // If next token is a number followed by degree symbol this value is complete
-        if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $this->lexer->glimpse()['type']) {
+        // If next token is a number followed by degree symbol, when tuple separator is space instead of comma, this value is complete
+        if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $glimpse['type']) {
             return $degrees;
         }
 
@@ -184,6 +187,28 @@ class Parser
 
         // Return value
         return $degrees;
+    }
+
+    /**
+     * Match ascii degree symbol, returns true if present
+     *
+     * @return bool
+     */
+    protected function ascii()
+    {
+        // Match degree symbol if requirement set
+        if (true === $this->ascii) {
+            return (bool) $this->match(Lexer::T_DEGREE);
+        }
+
+        // If requirement not set match degree if present
+        if (null === $this->ascii && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+            // Set requirement for any remaining value
+            return $this->ascii = (bool) $this->match(Lexer::T_DEGREE);
+        }
+
+        // Set requirement for any remaining value
+        return $this->ascii = false;
     }
 
     /**
