@@ -312,7 +312,9 @@ class Parser
         }
 
         // By default don't change sign
-        $sign = 1;
+        $sign  = 1;
+        // Define value range
+        $range = 0;
 
         switch (strtolower($cardinal)) {
             case 's':
@@ -322,6 +324,8 @@ class Parser
             case 'n':
                 // Set requirement for second coordinate
                 $this->cardinal = Lexer::T_CARDINAL_LON;
+                // Latitude values are +/- 90
+                $range = 90;
                 break;
             case 'w':
                 // Western longitudes are negative
@@ -330,9 +334,15 @@ class Parser
             case 'e':
                 // Set requirement for second coordinate
                 $this->cardinal = Lexer::T_CARDINAL_LAT;
+                // Longitude values are +/- 180
+                $range = 180;
                 break;
         }
 
+        // Verify unsigned value is in range
+        if ($value > $range) {
+            throw new \Exception(); // TODO
+        }
         // Return value with sign
         return $value * $sign;
     }
