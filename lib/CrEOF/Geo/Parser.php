@@ -357,7 +357,7 @@ class Parser
     protected function match($token)
     {
         if ( ! $this->lexer->isNextToken($token)) {
-            $this->syntaxError($this->lexer->getLiteral($token));
+            throw $this->syntaxError($this->lexer->getLiteral($token));
         }
 
         $this->lexer->moveNext();
