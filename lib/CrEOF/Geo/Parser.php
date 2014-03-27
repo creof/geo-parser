@@ -111,24 +111,35 @@ class Parser
      */
     protected function coordinate()
     {
+        // By default don't change sign
+        $sign = 1;
+
+        // Match minus if cardinal direction has not been seen
+        if ( ! ($this->cardinal > 0) && $this->lexer->isNextToken(Lexer::T_MINUS)) {
+            $this->match(Lexer::T_MINUS);
+
+            // Matching minus changes sign
+            $sign = -1;
+        }
+
         // Get coordinate value
         $coordinate = $this->degrees();
 
-        // Get sign if cardinal direction requirement defined by first coordinate
-        if ($this->cardinal > 0) {
-            return $coordinate * $this->cardinal();
+        // Get sign from cardinal direction if requirement defined by first coordinate and minus not matched
+        if ($sign > 0 && $this->cardinal > 0) {
+            return $this->cardinal($coordinate);
         }
 
-        // Get sign if this is first coordinate and cardinal direction is present
-        if (null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))) {
-            return $coordinate * $this->cardinal();
+        // Get sign from cardinal direction if it's present, this is first coordinate, and minus not matched
+        if ($sign > 0 && null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))) {
+            return $this->cardinal($coordinate);
         }
 
         // Remember there was no cardinal direction on first coordinate
         $this->cardinal = -1;
 
-        // Return value
-        return $coordinate;
+        // Return value with sign
+        return $sign * $coordinate;
     }
 
     /**
@@ -248,9 +259,12 @@ class Parser
     /**
      * Match cardinal direction and return sign
      *
+     * @param int|float $value
+     *
      * @return int
+     * @throws \Exception
      */
-    protected function cardinal()
+    protected function cardinal($value)
     {
         // If cardinal direction was not on previous coordinate it can be anything
         if (null === $this->cardinal) {
@@ -282,8 +296,8 @@ class Parser
                 break;
         }
 
-        // Return sign
-        return $sign;
+        // Return value with sign
+        return $value * $sign;
     }
 
     /**
