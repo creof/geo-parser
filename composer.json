@@ -2,7 +2,7 @@
     "name": "creof/geo-parser",
     "type": "library",
     "description": "Parser for geography coordinate strings",
-    "keywords": ["geography"],
+    "keywords": ["parser", "lexer", "string", "text", "geometry", "geography", "spatial", "geo", "coordinate"],
     "authors": [
         {
             "name": "Derek J. Lambert",
