@@ -33,13 +33,15 @@ Both single values and tuples are supported. Some samples of supported formats a
  * 40° 26.222' E
  * 65° 32.22' S
 
-6. Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer seconds with quote
+6. Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer or decimal seconds with quote
  * 40° 26' 46"
  * -79° 58' 56"
+ * 93° 19' 25.8"
 
-7. Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer seconds with quote, and cardinal direction
+7. Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer or decimal seconds with quote, and cardinal direction
  * 40° 26' 46" S
  * 99° 58' 56" W
+ * 44° 58' 53.9" N
 
 8. Two of any one format separated by space(s)
 

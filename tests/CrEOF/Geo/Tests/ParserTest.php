@@ -85,6 +85,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('40, 79', array(40, 79)),
             array('40°, 79°', array(40, 79)),
             array('40° 26\' 46" N 79° 58\' 56" W', array(40.446111111111, -79.982222222222)),
+            array('40° 26\' N 79° 58\' W', array(40.43333333333333, -79.966666666666669)),
             array('40.4738° N, 79.553° W', array(40.4738, -79.553)),
             array('40.4738° S, 79.553° W', array(-40.4738, -79.553)),
             array('40° 26.222\' N 79° 58.52\' E', array(40.437033333333, 79.975333333333)),
@@ -92,6 +93,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('40°26.222\' 79°58.52\'', array(40.437033333333, 79.975333333333)),
             array('40.222° -79.5852°', array(40.222, -79.5852)),
             array('40.222°, -79.5852°', array(40.222, -79.5852)),
+            array('44°58\'53.9"N 93°19\'25.8"W', array(44.981638888888888, -93.32383333333334)),
+            array('44°58\'53.9"N, 93°19\'25.8"W', array(44.981638888888888, -93.32383333333334))
         );
     }
 
@@ -113,6 +116,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('40 79W', '[Syntax Error] line 0, col 5: Error: Expected end of string, got "W" in value "40 79W"'),
             array('-40.757° 79°W', '[Syntax Error] line 0, col 14: Error: Expected end of string, got "W" in value "-40.757° 79°W"'),
             array('40.757°N -79.567°W', '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40.757°N -79.567°W"'),
+            array('44°58\'53.9N 93°19\'25.8"W', '[Syntax Error] line 0, col 11: Error: Expected CrEOF\Geo\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"')
         );
     }
 }

@@ -258,9 +258,10 @@ class Parser
      */
     protected function seconds()
     {
-        if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
+        // Seconds value can be an integer or float
+        if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT))) {
             // Get fractional seconds
-            $seconds = $this->match(Lexer::T_INTEGER) / 3600;
+            $seconds = $this->number() / 3600;
 
             // Match seconds symbol
             $this->match(Lexer::T_QUOTE);
