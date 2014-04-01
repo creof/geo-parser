@@ -88,7 +88,7 @@ class Parser
      * @return float|int|array
      * @throws \UnexpectedValueException
      */
-    protected function point()
+    private function point()
     {
         // Get first coordinate value
         $x = $this->coordinate();
@@ -120,7 +120,7 @@ class Parser
      *
      * @return float|int
      */
-    protected function coordinate()
+    private function coordinate()
     {
         // By default don't change sign
         $sign = false;
@@ -160,7 +160,7 @@ class Parser
      *
      * @return float|int
      */
-    protected function degrees()
+    private function degrees()
     {
         // Reset symbol requirement
         if ($this->symbol === Lexer::T_APOSTROPHE || $this->symbol === Lexer::T_QUOTE) {
@@ -212,7 +212,7 @@ class Parser
      *
      * @return bool|int
      */
-    protected function symbol()
+    private function symbol()
     {
         // Match symbol if requirement set and update requirement for next symbol
         switch ($this->symbol) {
@@ -261,7 +261,7 @@ class Parser
      *
      * @return float|int
      */
-    protected function minutes()
+    private function minutes()
     {
         // If using colon or minutes is an integer parse value
         if (Lexer::T_COLON === $this->symbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
@@ -304,7 +304,7 @@ class Parser
      *
      * @return float|int
      */
-    protected function seconds()
+    private function seconds()
     {
         // Seconds value can be an integer or float
         if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT))) {
@@ -330,7 +330,7 @@ class Parser
      * @return int|float
      * @throws \UnexpectedValueException
      */
-    protected function number()
+    private function number()
     {
         // If next token is a float match and return it
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
@@ -354,7 +354,7 @@ class Parser
      * @return int
      * @throws \Exception
      */
-    protected function cardinal($value)
+    private function cardinal($value)
     {
         // If cardinal direction was not on previous coordinate it can be anything
         if (null === $this->cardinal) {
@@ -408,7 +408,7 @@ class Parser
      * @return mixed
      * @throws \UnexpectedValueException
      */
-    protected function match($token)
+    private function match($token)
     {
         // If next token isn't type specified throw error
         if ( ! $this->lexer->isNextToken($token)) {
@@ -430,7 +430,7 @@ class Parser
      *
      * @return \UnexpectedValueException
      */
-    protected function syntaxError($expected = null, $token = null)
+    private function syntaxError($expected = null, $token = null)
     {
         if (null === $token) {
             $token = $this->lexer->lookahead;
