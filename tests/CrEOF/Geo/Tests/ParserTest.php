@@ -77,6 +77,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('40° S', -40),
             array('45.24', 45.24),
             array('45.24°', 45.24),
+            array('+45.24°', 45.24),
             array('45.24° S', -45.24),
             array('40° 26\' 46" N', 40.446111111111),
             array('40:26S', -40.43333333333333),
@@ -110,6 +111,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('-40°N 79°W', '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "N" in value "-40°N 79°W"'),
+            array('+40°N 79°W', '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "N" in value "+40°N 79°W"'),
+            array('40°N +79°W', '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "+" in value "40°N +79°W"'),
             array('40°N -79W', '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40°N -79W"'),
             array('40N -79°W', '[Syntax Error] line 0, col 4: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40N -79°W"'),
             array('40N 79°W', '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\Lexer::T_CARDINAL_LON, got "°" in value "40N 79°W"'),

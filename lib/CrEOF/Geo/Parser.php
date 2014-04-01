@@ -119,34 +119,36 @@ class Parser
     protected function coordinate()
     {
         // By default don't change sign
-        $sign = 1;
+        $sign = false;
 
         // Match minus if cardinal direction has not been seen
-        if ( ! ($this->cardinal > 0) && $this->lexer->isNextToken(Lexer::T_MINUS)) {
-            $this->match(Lexer::T_MINUS);
+        if ( ! ($this->cardinal > 0) && $this->lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
+            if ($this->lexer->isNextToken(Lexer::T_PLUS)) {
+                // Match plus and set sign
+                $this->match(Lexer::T_PLUS);
 
-            // Matching minus changes sign
-            $sign = -1;
+                $sign = 1;
+            } else {
+                // Match minus and set sign
+                $this->match(Lexer::T_MINUS);
+
+                $sign = -1;
+            }
         }
 
         // Get coordinate value
         $coordinate = $this->degrees();
 
-        // Get sign from cardinal direction if requirement defined by first coordinate and minus not matched
-        if ($sign > 0 && $this->cardinal > 0) {
-            return $this->cardinal($coordinate);
-        }
-
-        // Get sign from cardinal direction if it's present, this is first coordinate, and minus not matched
-        if ($sign > 0 && null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))) {
+        // If minus not matched get sign from cardinal direction if requirement defined or if it's present and the first coordinate
+        if (false === $sign && ($this->cardinal > 0 || (null === $this->cardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))))) {
             return $this->cardinal($coordinate);
         }
 
         // Remember there was no cardinal direction on first coordinate
         $this->cardinal = -1;
 
-        // Return value with sign
-        return $sign * $coordinate;
+        // Return value with sign if set
+        return (false === $sign ? 1 : $sign) * $coordinate;
     }
 
     /**

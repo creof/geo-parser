@@ -38,7 +38,8 @@ class Lexer extends AbstractLexer
     const T_FLOAT        = 4;
     const T_CARDINAL_LAT = 5;
     const T_CARDINAL_LON = 6;
-    const T_COMMA        = 8;
+    const T_COMMA        = 7;
+    const T_PLUS         = 8;
     const T_MINUS        = 9;
     const T_PERIOD       = 10;
     const T_COLON        = 11;
@@ -84,6 +85,8 @@ class Lexer extends AbstractLexer
                 return self::T_COMMA;
             case ('-' === $value):
                 return self::T_MINUS;
+            case ('+' === $value):
+                return self::T_PLUS;
             case ('.' === $value):
                 return self::T_PERIOD;
             case ('°' === $value):
