@@ -159,7 +159,7 @@ class Parser
         // If degrees is a float there will be no minutes or seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get degree value
-            $degrees = $this->number();
+            $degrees = $this->match(Lexer::T_FLOAT);
 
             // Degree float values may be followed by degree symbol
             $this->ascii();
@@ -223,7 +223,7 @@ class Parser
         // If minutes is a float there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get fractional minutes
-            $minutes = $this->number() / 60;
+            $minutes = $this->match(Lexer::T_FLOAT) / 60;
 
             // Match minutes symbol
             $this->match(Lexer::T_APOSTROPHE);
@@ -235,7 +235,7 @@ class Parser
         // If minutes is an integer parse value
         if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
             // Get fractional minutes
-            $minutes = $this->number() / 60;
+            $minutes = $this->match(Lexer::T_INTEGER) / 60;
 
             // Match minutes symbol
             $this->match(Lexer::T_APOSTROPHE);
