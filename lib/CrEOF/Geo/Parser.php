@@ -83,6 +83,8 @@ class Parser
     }
 
     /**
+     * Match and return single value or pair
+     *
      * @return float|int|array
      * @throws \UnexpectedValueException
      */
@@ -114,6 +116,8 @@ class Parser
     }
 
     /**
+     * Match and return single value
+     *
      * @return float|int
      */
     protected function coordinate()
@@ -210,7 +214,7 @@ class Parser
      */
     protected function symbol()
     {
-        // Match symbol if requirement set and set requirement for next symbol
+        // Match symbol if requirement set and update requirement for next symbol
         switch ($this->symbol) {
             case Lexer::T_COLON:
                 $this->match(Lexer::T_COLON);
@@ -219,10 +223,12 @@ class Parser
             case Lexer::T_DEGREE:
                 $this->match(Lexer::T_DEGREE);
 
+                // Next symbol will be minutes
                 return $this->symbol = Lexer::T_APOSTROPHE;
             case Lexer::T_APOSTROPHE:
                 $this->match(Lexer::T_APOSTROPHE);
 
+                // Next symbol will be seconds
                 return $this->symbol = Lexer::T_QUOTE;
             case Lexer::T_QUOTE:
                 $this->match(Lexer::T_QUOTE);
@@ -260,7 +266,7 @@ class Parser
         // If using colon or minutes is an integer parse value
         if (Lexer::T_COLON === $this->symbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
             // Get fractional minutes
-            $minutes = $this->match(Lexer::T_INTEGER) / 60;
+            $minutes = $this->match(Lexer::T_INTEGER) / 60; // TODO range check
 
             // If using colon and one doesn't follow value is done
             if (Lexer::T_COLON === $this->symbol && ! $this->lexer->isNextToken(Lexer::T_COLON)) {
@@ -280,7 +286,7 @@ class Parser
         // If minutes is a float there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get fractional minutes
-            $minutes = $this->match(Lexer::T_FLOAT) / 60;
+            $minutes = $this->match(Lexer::T_FLOAT) / 60; // TODO range check
 
             // Match minutes symbol
             $this->symbol();
@@ -303,7 +309,7 @@ class Parser
         // Seconds value can be an integer or float
         if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT))) {
             // Get fractional seconds
-            $seconds = $this->number() / 3600;
+            $seconds = $this->number() / 3600; // TODO range check
 
             // Match seconds symbol if requirement set
             if (Lexer::T_QUOTE === $this->symbol) {
