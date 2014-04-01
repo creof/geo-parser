@@ -23,6 +23,9 @@
 
 namespace CrEOF\Geo;
 
+use CrEOF\Geo\Exception\RangeException;
+use CrEOF\Geo\Exception\UnexpectedValueException;
+
 /**
  * Parser for geographic coordinate strings
  *
@@ -86,7 +89,7 @@ class Parser
      * Match and return single value or pair
      *
      * @return float|int|array
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function point()
     {
@@ -253,20 +256,27 @@ class Parser
 
         // Set requirement for any remaining value
         return $this->symbol = false;
-
     }
 
     /**
      * Match and return minutes value
      *
      * @return float|int
+     * @throws RangeException
      */
     private function minutes()
     {
         // If using colon or minutes is an integer parse value
         if (Lexer::T_COLON === $this->symbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
+            $minutes = $this->match(Lexer::T_INTEGER);
+
+            // Throw exception if minutes are greater than 60
+            if ($minutes > 60) {
+                throw $this->rangeError('Minutes', 60);
+            }
+
             // Get fractional minutes
-            $minutes = $this->match(Lexer::T_INTEGER) / 60; // TODO range check
+            $minutes = $minutes / 60;
 
             // If using colon and one doesn't follow value is done
             if (Lexer::T_COLON === $this->symbol && ! $this->lexer->isNextToken(Lexer::T_COLON)) {
@@ -285,8 +295,15 @@ class Parser
 
         // If minutes is a float there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+            $minutes = $this->match(Lexer::T_FLOAT);
+
+            // Throw exception if minutes are greater than 60
+            if ($minutes > 60) {
+                throw $this->rangeError('Minutes', 60);
+            }
+
             // Get fractional minutes
-            $minutes = $this->match(Lexer::T_FLOAT) / 60; // TODO range check
+            $minutes = $minutes / 60;
 
             // Match minutes symbol
             $this->symbol();
@@ -303,13 +320,21 @@ class Parser
      * Match and return seconds value
      *
      * @return float|int
+     * @throws RangeException
      */
     private function seconds()
     {
         // Seconds value can be an integer or float
         if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT))) {
+            $seconds = $this->number();
+
+            // Throw exception if seconds are greater than 60
+            if ($seconds > 60) {
+                throw $this->rangeError('Seconds', 60);
+            }
+
             // Get fractional seconds
-            $seconds = $this->number() / 3600; // TODO range check
+            $seconds = $seconds / 3600;
 
             // Match seconds symbol if requirement set
             if (Lexer::T_QUOTE === $this->symbol) {
@@ -328,7 +353,7 @@ class Parser
      * Match integer or float token and return value
      *
      * @return int|float
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function number()
     {
@@ -352,7 +377,7 @@ class Parser
      * @param int|float $value
      *
      * @return int
-     * @throws \Exception
+     * @throws RangeException
      */
     private function cardinal($value)
     {
@@ -373,7 +398,7 @@ class Parser
             case 's':
                 // Southern latitudes are negative
                 $sign = -1;
-            // no break
+                // no break
             case 'n':
                 // Set requirement for second coordinate
                 $this->cardinal = Lexer::T_CARDINAL_LON;
@@ -383,7 +408,7 @@ class Parser
             case 'w':
                 // Western longitudes are negative
                 $sign = -1;
-            // no break
+                // no break
             case 'e':
                 // Set requirement for second coordinate
                 $this->cardinal = Lexer::T_CARDINAL_LAT;
@@ -392,10 +417,11 @@ class Parser
                 break;
         }
 
-        // Verify unsigned value is in range
+        // Throw exception if value is out of range
         if ($value > $range) {
-            throw new \Exception(); // TODO
+            throw $this->rangeError('Degrees', $range, (-1 * $range));
         }
+
         // Return value with sign
         return $value * $sign;
     }
@@ -406,7 +432,7 @@ class Parser
      * @param int $token
      *
      * @return mixed
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function match($token)
     {
@@ -428,18 +454,18 @@ class Parser
      * @param string $expected
      * @param array  $token
      *
-     * @return \UnexpectedValueException
+     * @return UnexpectedValueException
      */
     private function syntaxError($expected = null, $token = null)
     {
-        if (null === $token) {
-            $token = $this->lexer->lookahead;
+        if (null === $expected) {
+            $expected = 'Unexpected';
+        } else {
+            $expected = sprintf('Expected %s, got', $expected);
         }
 
-        if (null === $expected) {
-            $expected = 'Unexpected ';
-        } else {
-            $expected = sprintf('Expected %s, got ', $expected);
+        if (null === $token) {
+            $token = $this->lexer->lookahead;
         }
 
         if (null === $this->lexer->lookahead) {
@@ -449,13 +475,47 @@ class Parser
         }
 
         $message = sprintf(
-            '[Syntax Error] line 0, col %d: Error: %s%s in value "%s"',
+            '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
             isset($token['position']) ? $token['position'] : '-1',
             $expected,
             $found,
             $this->input
         );
 
-        return new \UnexpectedValueException($message);
+        return new UnexpectedValueException($message);
+    }
+
+    /**
+     * Create out of range exception
+     *
+     * @param string $type
+     * @param int    $high
+     * @param int    $low
+     *
+     * @return RangeException
+     */
+    private function rangeError($type = null, $high = null, $low = null)
+    {
+        if (null === $type) {
+            $type = 'Value';
+        }
+
+        $range = null;
+
+        switch (true) {
+            case (null === $high && null === $low):
+                $range = 'out of range';
+                break;
+            case (null !== $high && null === $low):
+                $range = sprintf('greater than %d', $high);
+                break;
+            case (null !==$high && null !== $low):
+                $range = sprintf('out of range %d to %d', $low, $high);
+                break;
+        }
+
+        $message = sprintf('[Range Error] Error: %s %s in value "%s"', $type, $range, $this->input);
+
+        return new RangeException($message);
     }
 }
