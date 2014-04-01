@@ -350,7 +350,7 @@ class Parser
     {
         // If cardinal direction was not on previous coordinate it can be anything
         if (null === $this->cardinal) {
-            $cardinal = $this->match($this->lexer->lookahead['type']);
+            $cardinal = $this->match(Lexer::T_CARDINAL_LON === $this->lexer->lookahead['type'] ? Lexer::T_CARDINAL_LON : Lexer::T_CARDINAL_LAT);
         } else {
             // Cardinal direction must match requirement
             $cardinal = $this->match($this->cardinal);
