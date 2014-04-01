@@ -123,7 +123,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('40.757°N -79.567°W', '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "-" in value "40.757°N -79.567°W"'),
             array('44°58\'53.9N 93°19\'25.8"W', '[Syntax Error] line 0, col 11: Error: Expected CrEOF\Geo\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"'),
             array('40:26\'', '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "\'" in value "40:26\'"'),
-            array('132.4432:', '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got ":" in value "132.4432:"')
+            array('132.4432:', '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got ":" in value "132.4432:"'),
+            array('55:34:22°', '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "°" in value "55:34:22°"')
         );
     }
 }
