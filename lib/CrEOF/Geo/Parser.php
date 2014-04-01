@@ -257,24 +257,12 @@ class Parser
      */
     protected function minutes()
     {
-        // If minutes is a float there will be no seconds
-        if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
-            // Get fractional minutes
-            $minutes = $this->match(Lexer::T_FLOAT) / 60;
-
-            // Match minutes symbol
-            $this->symbol();
-
-            // return value
-            return $minutes;
-        }
-
-        // If minutes is an integer parse value
-        if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
+        // If using colon or minutes is an integer parse value
+        if (Lexer::T_COLON === $this->symbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
             // Get fractional minutes
             $minutes = $this->match(Lexer::T_INTEGER) / 60;
 
-            // If symbol is colon and one doesn't follow value is done
+            // If using colon and one doesn't follow value is done
             if (Lexer::T_COLON === $this->symbol && ! $this->lexer->isNextToken(Lexer::T_COLON)) {
                 return $minutes;
             }
@@ -286,6 +274,18 @@ class Parser
             $minutes += $this->seconds();
 
             // Return value
+            return $minutes;
+        }
+
+        // If minutes is a float there will be no seconds
+        if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+            // Get fractional minutes
+            $minutes = $this->match(Lexer::T_FLOAT) / 60;
+
+            // Match minutes symbol
+            $this->symbol();
+
+            // return value
             return $minutes;
         }
 
