@@ -51,7 +51,7 @@ class Parser
     /**
      * @var int
      */
-    private $ascii;
+    private $symbol;
 
     /**
      * Constructor
@@ -156,13 +156,23 @@ class Parser
      */
     protected function degrees()
     {
+        // Reset symbol requirement
+        if ($this->symbol === Lexer::T_APOSTROPHE || $this->symbol === Lexer::T_QUOTE) {
+            $this->symbol = Lexer::T_DEGREE;
+        }
+
         // If degrees is a float there will be no minutes or seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get degree value
             $degrees = $this->match(Lexer::T_FLOAT);
 
             // Degree float values may be followed by degree symbol
-            $this->ascii();
+            if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
+                $this->match(Lexer::T_DEGREE);
+
+                // Set requirement for any remaining value
+                $this->symbol = Lexer::T_DEGREE;
+            }
 
             // Return value
             return $degrees;
@@ -171,16 +181,16 @@ class Parser
         // If degrees isn't a float it must be an integer
         $degrees = $this->number();
 
-        // If integer is not followed by a degree symbol this value is complete
-        if ( ! $this->ascii()) {
+        // If integer is not followed by a symbol this value is complete
+        if ( ! $this->symbol()) {
             return $degrees;
         }
 
         // Grab peek of next token since we can't array dereference result in PHP 5.3
         $glimpse = $this->lexer->glimpse();
 
-        // If next token is a number followed by degree symbol, when tuple separator is space instead of comma, this value is complete
-        if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $glimpse['type']) {
+        // If a colon hasn't been matched, and next token is a number followed by degree symbol, when tuple separator is space instead of comma, this value is complete
+        if (Lexer::T_COLON !== $this->symbol && $this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $glimpse['type']) {
             return $degrees;
         }
 
@@ -192,25 +202,50 @@ class Parser
     }
 
     /**
-     * Match ascii degree symbol, returns true if present
+     * Match value component symbol if required or present
      *
-     * @return bool
+     * @return bool|int
      */
-    protected function ascii()
+    protected function symbol()
     {
-        // Match degree symbol if requirement set
-        if (true === $this->ascii) {
-            return (bool) $this->match(Lexer::T_DEGREE);
+        // Match symbol if requirement set and set requirement for next symbol
+        switch ($this->symbol) {
+            case Lexer::T_COLON:
+                $this->match(Lexer::T_COLON);
+
+                return $this->symbol;
+            case Lexer::T_DEGREE:
+                $this->match(Lexer::T_DEGREE);
+
+                return $this->symbol = Lexer::T_APOSTROPHE;
+            case Lexer::T_APOSTROPHE:
+                $this->match(Lexer::T_APOSTROPHE);
+
+                return $this->symbol = Lexer::T_QUOTE;
+            case Lexer::T_QUOTE:
+                $this->match(Lexer::T_QUOTE);
+
+                return $this->symbol;
         }
 
-        // If requirement not set match degree if present
-        if (null === $this->ascii && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+        // If requirement not set match symbol if present
+        if (null === $this->symbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
+            $this->match(Lexer::T_COLON);
+
             // Set requirement for any remaining value
-            return $this->ascii = (bool) $this->match(Lexer::T_DEGREE);
+            return $this->symbol = Lexer::T_COLON;
+        }
+
+        if (null === $this->symbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+            $this->match(Lexer::T_DEGREE);
+
+            // Set requirement for any remaining value
+            return $this->symbol = Lexer::T_APOSTROPHE;
         }
 
         // Set requirement for any remaining value
-        return $this->ascii = false;
+        return $this->symbol = false;
+
     }
 
     /**
@@ -226,7 +261,7 @@ class Parser
             $minutes = $this->match(Lexer::T_FLOAT) / 60;
 
             // Match minutes symbol
-            $this->match(Lexer::T_APOSTROPHE);
+            $this->symbol();
 
             // return value
             return $minutes;
@@ -237,8 +272,13 @@ class Parser
             // Get fractional minutes
             $minutes = $this->match(Lexer::T_INTEGER) / 60;
 
+            // If symbol is colon and one doesn't follow value is done
+            if (Lexer::T_COLON === $this->symbol && ! $this->lexer->isNextToken(Lexer::T_COLON)) {
+                return $minutes;
+            }
+
             // Match minutes symbol
-            $this->match(Lexer::T_APOSTROPHE);
+            $this->symbol();
 
             // Add seconds to value
             $minutes += $this->seconds();
@@ -263,8 +303,10 @@ class Parser
             // Get fractional seconds
             $seconds = $this->number() / 3600;
 
-            // Match seconds symbol
-            $this->match(Lexer::T_QUOTE);
+            // Match seconds symbol if requirement set
+            if (Lexer::T_QUOTE === $this->symbol) {
+                $this->match(Lexer::T_QUOTE);
+            }
 
             // Return value
             return $seconds;
@@ -323,7 +365,7 @@ class Parser
             case 's':
                 // Southern latitudes are negative
                 $sign = -1;
-                // no break
+            // no break
             case 'n':
                 // Set requirement for second coordinate
                 $this->cardinal = Lexer::T_CARDINAL_LON;
@@ -333,7 +375,7 @@ class Parser
             case 'w':
                 // Western longitudes are negative
                 $sign = -1;
-                // no break
+            // no break
             case 'e':
                 // Set requirement for second coordinate
                 $this->cardinal = Lexer::T_CARDINAL_LAT;
