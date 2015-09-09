@@ -129,7 +129,7 @@ class Parser
         $sign = false;
 
         // Match minus if cardinal direction has not been seen
-        if ( ! ($this->cardinal > 0) && $this->lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
+        if (! ($this->cardinal > 0) && $this->lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
             if ($this->lexer->isNextToken(Lexer::T_PLUS)) {
                 // Match plus and set sign
                 $this->match(Lexer::T_PLUS);
@@ -191,7 +191,7 @@ class Parser
         $degrees = $this->number();
 
         // If integer is not followed by a symbol this value is complete
-        if ( ! $this->symbol()) {
+        if (! $this->symbol()) {
             return $degrees;
         }
 
@@ -437,7 +437,7 @@ class Parser
     private function match($token)
     {
         // If next token isn't type specified throw error
-        if ( ! $this->lexer->isNextToken($token)) {
+        if (! $this->lexer->isNextToken($token)) {
             throw $this->syntaxError($this->lexer->getLiteral($token));
         }
 
