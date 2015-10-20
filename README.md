@@ -1,5 +1,7 @@
 # creof/geo-parser
 
+[![Build Status](https://travis-ci.org/creof/geo-parse.svg?branch=master)](https://travis-ci.org/creof/geo-parse)
+
 Lexer and parser library for geometric and geographic string values.
 
 This library is used in the creof/geo library.
