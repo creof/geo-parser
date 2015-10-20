@@ -8,3 +8,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Dependency on SPL extension to composer.json since the package exceptions extend them.
 - Stub TODO.md file.
 - CONTRIBUTING.md file with guidelines.
+- Travis CI config
