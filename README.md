@@ -1,5 +1,7 @@
 # creof/geo-parser
 
+[![Code Climate](https://codeclimate.com/github/creof/geo-parse/badges/gpa.svg)](https://codeclimate.com/github/creof/geo-parse)
+[![Test Coverage](https://codeclimate.com/github/creof/geo-parse/badges/coverage.svg)](https://codeclimate.com/github/creof/geo-parse/coverage)
 [![Build Status](https://travis-ci.org/creof/geo-parse.svg?branch=master)](https://travis-ci.org/creof/geo-parse)
 
 Lexer and parser library for geometric and geographic string values.
