@@ -93,9 +93,11 @@ class Lexer extends AbstractLexer
                 return self::T_PERIOD;
             case ('°' === $value):
                 return self::T_DEGREE;
-            case (preg_match('/[ns]/i', $value)):
+            case ('N' === strtoupper($value)):
+            case ('S' === strtoupper($value)):
                 return self::T_CARDINAL_LAT;
-            case (preg_match('/[ew]/i', $value)):
+            case ('E' === strtoupper($value)):
+            case ('W' === strtoupper($value)):
                 return self::T_CARDINAL_LON;
             default:
                 break;
