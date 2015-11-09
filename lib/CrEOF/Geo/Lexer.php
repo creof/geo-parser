@@ -78,8 +78,10 @@ class Lexer extends AbstractLexer
             case (':' === $value):
                 return self::T_COLON;
             case ('\'' === $value):
+            case ('′' === $value):
                 return self::T_APOSTROPHE;
             case ('"' === $value):
+            case ('″' === $value):
                 return self::T_QUOTE;
             case (',' === $value):
                 return self::T_COMMA;
