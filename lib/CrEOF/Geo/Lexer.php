@@ -62,8 +62,6 @@ class Lexer extends AbstractLexer
      */
     protected function getType(&$value)
     {
-        $type = self::T_NONE;
-
         switch (true) {
             case (is_numeric($value)):
                 if (false !== strpos($value, '.')) {
@@ -100,10 +98,8 @@ class Lexer extends AbstractLexer
             case ('W' === strtoupper($value)):
                 return self::T_CARDINAL_LON;
             default:
-                break;
+                return self::T_NONE;
         }
-
-        return $type;
     }
 
     /**
