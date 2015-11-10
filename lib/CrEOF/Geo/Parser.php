@@ -336,9 +336,9 @@ class Parser
             // Get fractional seconds
             $seconds = $seconds / 3600;
 
-            // Match seconds symbol if requirement set
-            if (Lexer::T_QUOTE === $this->symbol) {
-                $this->match(Lexer::T_QUOTE);
+            // Match seconds symbol if requirement not colon
+            if (Lexer::T_COLON !== $this->symbol) {
+                $this->symbol();
             }
 
             // Return value
