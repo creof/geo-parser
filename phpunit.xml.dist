@@ -9,4 +9,10 @@
             <directory>./tests/CrEOF/Geo/Tests</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./vendor</directory>
+        </blacklist>
+    </filter>
 </phpunit>
