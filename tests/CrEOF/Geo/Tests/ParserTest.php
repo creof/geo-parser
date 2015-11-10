@@ -137,7 +137,6 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('55:200:32', 'RangeException', '[Range Error] Error: Minutes greater than 60 in value "55:200:32"'),
             array('55:20:99', 'RangeException', '[Range Error] Error: Seconds greater than 60 in value "55:20:99"'),
             array('55°70.99\'', 'RangeException', '[Range Error] Error: Minutes greater than 60 in value "55°70.99\'"')
-
         );
     }
 }
