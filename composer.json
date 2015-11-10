@@ -16,9 +16,7 @@
         "doctrine/lexer": ">=1.0"
     },
     "require-dev": {
-        "phpunit/phpunit":           ">=4.8",
-        "phpmd/phpmd":               "@stable",
-        "squizlabs/php_codesniffer": "2.*" ,
+        "phpunit/phpunit":               ">=4.8",
         "codeclimate/php-test-reporter": "dev-master"
     },
     "autoload": {

@@ -9,3 +9,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Stub TODO.md file.
 - CONTRIBUTING.md file with guidelines.
 - Travis CI config
+- Code Climate config
