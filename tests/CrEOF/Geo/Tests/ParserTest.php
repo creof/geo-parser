@@ -131,6 +131,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array('132.4432:', 'UnexpectedValueException', '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got ":" in value "132.4432:"'),
             array('55:34:22°', 'UnexpectedValueException', '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "°" in value "55:34:22°"'),
             array('55:34.22', 'UnexpectedValueException', '[Syntax Error] line 0, col 3: Error: Expected CrEOF\Geo\Lexer::T_INTEGER, got "34.22" in value "55:34.22"'),
+            array('55#34.22', 'UnexpectedValueException', '[Syntax Error] line 0, col 2: Error: Expected CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT, got "#" in value "55#34.22"'),
             array('200N', 'RangeException', '[Range Error] Error: Degrees out of range -90 to 90 in value "200N"'),
             array('55:200:32', 'RangeException', '[Range Error] Error: Minutes greater than 60 in value "55:200:32"'),
             array('55:20:99', 'RangeException', '[Range Error] Error: Seconds greater than 60 in value "55:20:99"')
