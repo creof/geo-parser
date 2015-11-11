@@ -1,8 +1,8 @@
 # creof/geo-parser
 
-[![Code Climate](https://codeclimate.com/github/creof/geo-parse/badges/gpa.svg)](https://codeclimate.com/github/creof/geo-parse)
-[![Test Coverage](https://codeclimate.com/github/creof/geo-parse/badges/coverage.svg)](https://codeclimate.com/github/creof/geo-parse/coverage)
-[![Build Status](https://travis-ci.org/creof/geo-parse.svg?branch=master)](https://travis-ci.org/creof/geo-parse)
+[![Code Climate](https://codeclimate.com/github/creof/geo-parser/badges/gpa.svg)](https://codeclimate.com/github/creof/geo-parser)
+[![Test Coverage](https://codeclimate.com/github/creof/geo-parser/badges/coverage.svg)](https://codeclimate.com/github/creof/geo-parser/coverage)
+[![Build Status](https://travis-ci.org/creof/geo-parser.svg?branch=master)](https://travis-ci.org/creof/geo-parser)
 
 Lexer and parser library for geometric and geographic string values.
 
@@ -70,7 +70,3 @@ Both single values and pairs are supported. Some samples of supported formats ar
 ## Return
 
 The parser will return a integer/float or an array containing a pair of these values.
-
-## Todo
-* Match pairs contained in parenthesis?
-* Allow colon as a separator? (like 108:53:94W)
