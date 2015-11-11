@@ -5,3 +5,6 @@ engines:
     enabled: true
   phpmd:
     enabled: true
+ratings:
+  paths:
+    - "**.php"
