@@ -119,7 +119,7 @@ class Parser
     }
 
     /**
-     * Match and return single value
+     * Match and return single coordinate value
      *
      * @return float|int
      */
@@ -128,7 +128,7 @@ class Parser
         // By default don't change sign
         $sign = false;
 
-        // Match minus if cardinal direction has not been seen
+        // Match sign if cardinal direction has not been seen
         if (! ($this->nextCardinal > 0) && $this->lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
             $sign = $this->sign();
         }
@@ -136,7 +136,8 @@ class Parser
         // Get coordinate value
         $coordinate = $this->degrees();
 
-        // If minus not matched get sign from cardinal direction if requirement defined or if it's present and the first coordinate
+        // If sign not matched determine sign from cardinal direction when required
+        // or if cardinal direction is present and this is first coordinate in a pair
         if (false === $sign && ($this->nextCardinal > 0 || (null === $this->nextCardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))))) {
             return $this->cardinal($coordinate);
         }
@@ -149,6 +150,8 @@ class Parser
     }
 
     /**
+     * Match plus or minus sign and return coefficient
+     *
      * @return int
      */
     private function sign()
@@ -187,7 +190,7 @@ class Parser
             if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
                 $this->match(Lexer::T_DEGREE);
 
-                // Set requirement for any remaining value
+                // Set symbol requirement for next value in pair
                 $this->nextSymbol = Lexer::T_DEGREE;
             }
 
