@@ -6,9 +6,14 @@
 
 Lexer and parser library for geometric and geographic string values.
 
-This library is used in the creof/geo library.
+## Usage
+Pass value to be parsed in the constructor, then call parse() on the created object.
 
-Sample code can be found in the unit tests.
+```php
+$input  = '79°56′55″W, 40°26′46″N';
+$parser = new Parser($input);
+$value  = $parser->parse();
+```
 
 ## Supported Formats
 
