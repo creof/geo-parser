@@ -228,6 +228,22 @@ class Parser
      */
     private function symbol()
     {
+        // If symbol requirement not set match colon if present
+        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
+            $this->match(Lexer::T_COLON);
+
+            // Set symbol requirement for any remaining value
+            return $this->nextSymbol = Lexer::T_COLON;
+        }
+
+        // If symbol requirement not set match degree if present
+        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+            $this->match(Lexer::T_DEGREE);
+
+            // Set requirement for any remaining value
+            return $this->nextSymbol = Lexer::T_APOSTROPHE;
+        }
+
         // Match symbol if requirement set and update requirement for next symbol
         switch ($this->nextSymbol) {
             case Lexer::T_COLON:
@@ -248,21 +264,6 @@ class Parser
                 $this->match(Lexer::T_QUOTE);
 
                 return $this->nextSymbol;
-        }
-
-        // If requirement not set match symbol if present
-        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
-            $this->match(Lexer::T_COLON);
-
-            // Set requirement for any remaining value
-            return $this->nextSymbol = Lexer::T_COLON;
-        }
-
-        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
-            $this->match(Lexer::T_DEGREE);
-
-            // Set requirement for any remaining value
-            return $this->nextSymbol = Lexer::T_APOSTROPHE;
         }
 
         // Set requirement for any remaining value
