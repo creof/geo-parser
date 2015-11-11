@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
-## [1.0.0] - 2015-11-10
+## [1.0.0] - 2015-11-11
 ### Added
 - Change log file to chronicle changes.
 - Dependency on SPL extension to composer.json since the package exceptions extend them.
@@ -16,9 +16,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Code Climate config
 - Add support for unicode prime and double prime.
 - Tests for uncovered parser branches.
-- Change property names in parser to more accurately indicate what they're for.
 ### Changed
 - Use string compare instead of regex for cardinal direction.
 - Remove unneeded deps for phpmd and phpcs - Code Climate with handle this.
 - Match seconds symbol with symbol().
+- Change property names in parser to more accurately indicate what they're for.
 
