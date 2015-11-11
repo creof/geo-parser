@@ -130,17 +130,7 @@ class Parser
 
         // Match minus if cardinal direction has not been seen
         if (! ($this->nextCardinal > 0) && $this->lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
-            if ($this->lexer->isNextToken(Lexer::T_PLUS)) {
-                // Match plus and set sign
-                $this->match(Lexer::T_PLUS);
-
-                $sign = 1;
-            } else {
-                // Match minus and set sign
-                $this->match(Lexer::T_MINUS);
-
-                $sign = -1;
-            }
+            $sign = $this->sign();
         }
 
         // Get coordinate value
@@ -156,6 +146,24 @@ class Parser
 
         // Return value with sign if set
         return (false === $sign ? 1 : $sign) * $coordinate;
+    }
+
+    /**
+     * @return int
+     */
+    private function sign()
+    {
+        if ($this->lexer->isNextToken(Lexer::T_PLUS)) {
+            // Match plus and set sign
+            $this->match(Lexer::T_PLUS);
+
+            return 1;
+        }
+
+        // Match minus and set sign
+        $this->match(Lexer::T_MINUS);
+
+        return -1;
     }
 
     /**
