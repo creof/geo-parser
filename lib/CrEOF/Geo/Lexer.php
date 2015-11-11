@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014 Derek J. Lambert
+ * Copyright (C) 2015 Derek J. Lambert
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,8 +62,6 @@ class Lexer extends AbstractLexer
      */
     protected function getType(&$value)
     {
-        $type = self::T_NONE;
-
         switch (true) {
             case (is_numeric($value)):
                 if (false !== strpos($value, '.')) {
@@ -78,10 +76,10 @@ class Lexer extends AbstractLexer
             case (':' === $value):
                 return self::T_COLON;
             case ('\'' === $value):
-            case ('′' === $value):
+            case ("\xe2\x80\xb2" === $value):
                 return self::T_APOSTROPHE;
             case ('"' === $value):
-            case ('″' === $value):
+            case ("\xe2\x80\xb3" === $value):
                 return self::T_QUOTE;
             case (',' === $value):
                 return self::T_COMMA;
@@ -100,10 +98,8 @@ class Lexer extends AbstractLexer
             case ('W' === strtoupper($value)):
                 return self::T_CARDINAL_LON;
             default:
-                break;
+                return self::T_NONE;
         }
-
-        return $type;
     }
 
     /**
