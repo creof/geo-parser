@@ -2,7 +2,7 @@
 
 [![Code Climate](https://codeclimate.com/github/creof/geo-parser/badges/gpa.svg)](https://codeclimate.com/github/creof/geo-parser)
 [![Test Coverage](https://codeclimate.com/github/creof/geo-parser/badges/coverage.svg)](https://codeclimate.com/github/creof/geo-parser/coverage)
-[![Build Status](https://travis-ci.org/creof/geo-parser.svg?branch=master)](https://travis-ci.org/creof/geo-parser)
+[![Build Status](https://travis-ci.org/creof/geo-parser.svg)](https://travis-ci.org/creof/geo-parser)
 
 Lexer and parser library for geometric and geographic string values.
 
