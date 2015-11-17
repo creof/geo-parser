@@ -494,17 +494,7 @@ class Parser
      */
     private function rangeError($type, $high, $low = null)
     {
-        $range = null;
-
-        switch (true) {
-            case (null !== $high && null === $low):
-                $range = sprintf('greater than %d', $high);
-                break;
-            case (null !==$high && null !== $low):
-                $range = sprintf('out of range %d to %d', $low, $high);
-                break;
-        }
-
+        $range   = null === $low ? sprintf('greater than %d', $high) : sprintf('out of range %d to %d', $low, $high);
         $message = sprintf('[Range Error] Error: %s %s in value "%s"', $type, $range, $this->input);
 
         return new RangeException($message);
