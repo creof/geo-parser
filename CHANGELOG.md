@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
+## [1.0.1] - 2015-11-17
+### Added
+- Exclude fingerprint for Code Climate fixme engine to ignore "Stub TODO.md file." in changelog.
+### Changed
+- Removed code for unused conditions in Parser error methods.
+- Removed case for token T_PERIOD in getType method of Lexer, it's not used in Parser.
+
 ## [1.0.0] - 2015-11-11
 ### Added
 - Change log file to chronicle changes.
