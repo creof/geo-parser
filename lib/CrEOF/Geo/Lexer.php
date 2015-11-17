@@ -87,8 +87,6 @@ class Lexer extends AbstractLexer
                 return self::T_MINUS;
             case ('+' === $value):
                 return self::T_PLUS;
-            case ('.' === $value):
-                return self::T_PERIOD;
             case ('°' === $value):
                 return self::T_DEGREE;
             case ('N' === strtoupper($value)):
