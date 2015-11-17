@@ -463,27 +463,14 @@ class Parser
      * Create exception with descriptive error message
      *
      * @param string $expected
-     * @param array  $token
      *
      * @return UnexpectedValueException
      */
-    private function syntaxError($expected = null, $token = null)
+    private function syntaxError($expected)
     {
-        if (null === $expected) {
-            $expected = 'Unexpected';
-        } else {
-            $expected = sprintf('Expected %s, got', $expected);
-        }
-
-        if (null === $token) {
-            $token = $this->lexer->lookahead;
-        }
-
-        if (null === $this->lexer->lookahead) {
-            $found = 'end of string.';
-        } else {
-            $found = sprintf('"%s"', $token['value']);
-        }
+        $expected = sprintf('Expected %s, got', $expected);
+        $token    = $this->lexer->lookahead;
+        $found    = null === $this->lexer->lookahead ? 'end of string.' : sprintf('"%s"', $token['value']);
 
         $message = sprintf(
             '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
@@ -505,18 +492,11 @@ class Parser
      *
      * @return RangeException
      */
-    private function rangeError($type = null, $high = null, $low = null)
+    private function rangeError($type, $high, $low = null)
     {
-        if (null === $type) {
-            $type = 'Value';
-        }
-
         $range = null;
 
         switch (true) {
-            case (null === $high && null === $low):
-                $range = 'out of range';
-                break;
             case (null !== $high && null === $low):
                 $range = sprintf('greater than %d', $high);
                 break;
