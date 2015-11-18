@@ -21,10 +21,10 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo;
+namespace CrEOF\Geo\String;
 
-use CrEOF\Geo\Exception\RangeException;
-use CrEOF\Geo\Exception\UnexpectedValueException;
+use CrEOF\Geo\String\Exception\RangeException;
+use CrEOF\Geo\String\Exception\UnexpectedValueException;
 
 /**
  * Parser for geographic coordinate strings
@@ -380,7 +380,7 @@ class Parser
         }
 
         // Throw exception since no match
-        throw $this->syntaxError('CrEOF\Geo\Lexer::T_INTEGER or CrEOF\Geo\Lexer::T_FLOAT');
+        throw $this->syntaxError('CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT');
     }
 
     /**

@@ -21,15 +21,15 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\Exception;
+namespace CrEOF\Geo\String\Exception;
 
 /**
- * UnexpectedValueException
+ * Exception interface for library exceptions
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-class UnexpectedValueException extends \UnexpectedValueException implements ExceptionInterface
+interface ExceptionInterface
 {
 
 }

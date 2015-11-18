@@ -21,15 +21,15 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\Exception;
+namespace CrEOF\Geo\String\Exception;
 
 /**
- * RangeException
+ * InvalidArgumentException
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-class RangeException extends \RangeException implements ExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 
 }
