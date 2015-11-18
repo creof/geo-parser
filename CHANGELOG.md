@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 ### Changed
 
+## [2.0.0] - 2015-11-18
+### Added
+- Change base namespace to CrEOF\Geo\String to avoid class collision with other CrEOF packages.
+
 ## [1.0.1] - 2015-11-17
 ### Added
 - Exclude fingerprint for Code Climate fixme engine to ignore "Stub TODO.md file." in changelog.

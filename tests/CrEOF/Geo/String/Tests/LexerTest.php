@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\Tests;
+namespace CrEOF\Geo\String\Tests;
 
-use CrEOF\Geo\Lexer;
+use CrEOF\Geo\String\Lexer;
 
 /**
  * Lexer tests
