@@ -57,6 +57,36 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     {
         return array (
             array(
+                '15',
+                array(
+                    array('value' => 15, 'type' => Lexer::T_INTEGER, 'position' => 0),
+                )
+            ),
+            array(
+                '1E5',
+                array(
+                    array('value' => 100000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                '1e5',
+                array(
+                    array('value' => 100000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                '1.5E5',
+                array(
+                    array('value' => 150000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                '1E-5',
+                array(
+                    array('value' => 0.00001, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
                 '40° 26\' 46" N',
                 array(
                     array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),

@@ -72,6 +72,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         return array(
             array('40', 40),
             array('-40', -40),
+            array('1E5', 100000),
+            array('1e5', 100000),
+            array('1e5°', 100000),
             array('40°', 40),
             array('-40°', -40),
             array('40° N', 40),
