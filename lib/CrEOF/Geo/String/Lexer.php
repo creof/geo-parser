@@ -64,15 +64,13 @@ class Lexer extends AbstractLexer
     {
         switch (true) {
             case (is_numeric($value)):
-                if (false !== strpos($value, '.')) {
-                    $value = (float) $value;
+                $value += 0;
 
-                    return self::T_FLOAT;
+                if (is_int($value)) {
+                    return self::T_INTEGER;
                 }
 
-                $value = (int) $value;
-
-                return self::T_INTEGER;
+                return self::T_FLOAT;
             case (':' === $value):
                 return self::T_COLON;
             case ('\'' === $value):
