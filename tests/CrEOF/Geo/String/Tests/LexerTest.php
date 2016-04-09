@@ -50,6 +50,21 @@ class LexerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testReusedLexer()
+    {
+        $lexer = new Lexer();
+
+        foreach ($this->testDataSource() as $data) {
+            $index = 0;
+
+            $lexer->setInput($data[0]);
+
+            while (null !== $actual = $lexer->peek()) {
+                $this->assertEquals($data[1][$index++], $actual);
+            }
+        }
+    }
+
     /**
      * @return array[]
      */
