@@ -315,7 +315,7 @@ class Parser
             }
 
             // Get fractional minutes
-            $minutes = $minutes / 60;
+            $minutes /= 60;
 
             // Match minutes symbol
             $this->symbol();
@@ -346,7 +346,7 @@ class Parser
             }
 
             // Get fractional seconds
-            $seconds = $seconds / 3600;
+            $seconds /= 3600;
 
             // Match seconds symbol if requirement not colon
             if (Lexer::T_COLON !== $this->nextSymbol) {
@@ -430,7 +430,7 @@ class Parser
 
         // Throw exception if value is out of range
         if ($value > $range) {
-            throw $this->rangeError('Degrees', $range, (-1 * $range));
+            throw $this->rangeError('Degrees', $range, -1 * $range);
         }
 
         // Return value with sign
