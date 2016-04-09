@@ -48,6 +48,17 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $value);
     }
 
+    public function testParserReuse()
+    {
+        $parser = new Parser();
+
+        foreach ($this->dataSourceGood() as $data) {
+            $value = $parser->parse($data[0]);
+
+            $this->assertEquals($data[1], $value);
+        }
+    }
+
     /**
      * @param string $input
      * @param string $exception
