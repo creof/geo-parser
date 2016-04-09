@@ -42,11 +42,6 @@ class Parser
     private $input;
 
     /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
      * @var int
      */
     private $nextCardinal;
@@ -57,29 +52,48 @@ class Parser
     private $nextSymbol;
 
     /**
+     * @var Lexer
+     */
+    private static $lexer;
+
+    /**
      * Constructor
      *
      * Setup up instance properties
      *
-     * @param string $input
+     * @param string|null $input
      */
-    public function __construct($input)
+    public function __construct($input = null)
     {
-        // Save input string for use in messages
-        $this->input = $input;
-        // Create new Lexer and tokenize input string
-        $this->lexer = new Lexer($input);
+        if (null === self::$lexer) {
+            self::$lexer = new Lexer();
+        }
+
+        if (null !== $input) {
+            $this->input = $input;
+        }
     }
 
     /**
      * Parse input string
      *
+     * @param string|null $input
+     *
      * @return float|int|array
      */
-    public function parse()
+    public function parse($input = null)
     {
+        if (null !== $input) {
+            $this->input = $input;
+        }
+
+        $this->nextCardinal = null;
+        $this->nextSymbol   = null;
+
+        self::$lexer->setInput($this->input);
+
         // Move Lexer to first token
-        $this->lexer->moveNext();
+        self::$lexer->moveNext();
 
         // Parse and return value
         return $this->point();
@@ -97,12 +111,12 @@ class Parser
         $x = $this->coordinate();
 
         // If no additional tokens return single coordinate
-        if (null === $this->lexer->lookahead) {
+        if (null === self::$lexer->lookahead) {
             return $x;
         }
 
         // Coordinate pairs may be separated by a comma
-        if ($this->lexer->isNextToken(Lexer::T_COMMA)) {
+        if (self::$lexer->isNextToken(Lexer::T_COMMA)) {
             $this->match(Lexer::T_COMMA);
         }
 
@@ -110,7 +124,7 @@ class Parser
         $y = $this->coordinate();
 
         // There should be no additional tokens
-        if (null !== $this->lexer->lookahead) {
+        if (null !== self::$lexer->lookahead) {
             throw $this->syntaxError('end of string');
         }
 
@@ -129,7 +143,7 @@ class Parser
         $sign = false;
 
         // Match sign if cardinal direction has not been seen
-        if (! ($this->nextCardinal > 0) && $this->lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
+        if (! ($this->nextCardinal > 0) && self::$lexer->isNextTokenAny(array(Lexer::T_PLUS, Lexer::T_MINUS))) {
             $sign = $this->sign();
         }
 
@@ -138,7 +152,7 @@ class Parser
 
         // If sign not matched determine sign from cardinal direction when required
         // or if cardinal direction is present and this is first coordinate in a pair
-        if (false === $sign && ($this->nextCardinal > 0 || (null === $this->nextCardinal && $this->lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))))) {
+        if (false === $sign && ($this->nextCardinal > 0 || (null === $this->nextCardinal && self::$lexer->isNextTokenAny(array(Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON))))) {
             return $this->cardinal($coordinate);
         }
 
@@ -156,7 +170,7 @@ class Parser
      */
     private function sign()
     {
-        if ($this->lexer->isNextToken(Lexer::T_PLUS)) {
+        if (self::$lexer->isNextToken(Lexer::T_PLUS)) {
             // Match plus and set sign
             $this->match(Lexer::T_PLUS);
 
@@ -182,12 +196,12 @@ class Parser
         }
 
         // If degrees is a float there will be no minutes or seconds
-        if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+        if (self::$lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get degree value
             $degrees = $this->match(Lexer::T_FLOAT);
 
             // Degree float values may be followed by degree symbol
-            if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
+            if (self::$lexer->isNextToken(Lexer::T_DEGREE)) {
                 $this->match(Lexer::T_DEGREE);
 
                 // Set symbol requirement for next value in pair
@@ -207,10 +221,10 @@ class Parser
         }
 
         // Grab peek of next token since we can't array dereference result in PHP 5.3
-        $glimpse = $this->lexer->glimpse();
+        $glimpse = self::$lexer->glimpse();
 
         // If a colon hasn't been matched, and next token is a number followed by degree symbol, when tuple separator is space instead of comma, this value is complete
-        if (Lexer::T_COLON !== $this->nextSymbol && $this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $glimpse['type']) {
+        if (Lexer::T_COLON !== $this->nextSymbol && self::$lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $glimpse['type']) {
             return $degrees;
         }
 
@@ -229,7 +243,7 @@ class Parser
     private function symbol()
     {
         // If symbol requirement not set match colon if present
-        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
+        if (null === $this->nextSymbol && self::$lexer->isNextToken(Lexer::T_COLON)) {
             $this->match(Lexer::T_COLON);
 
             // Set symbol requirement for any remaining value
@@ -237,7 +251,7 @@ class Parser
         }
 
         // If symbol requirement not set match degree if present
-        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+        if (null === $this->nextSymbol && self::$lexer->isNextToken(Lexer::T_DEGREE)) {
             $this->match(Lexer::T_DEGREE);
 
             // Set requirement for any remaining value
@@ -279,7 +293,7 @@ class Parser
     private function minutes()
     {
         // If using colon or minutes is an integer parse value
-        if (Lexer::T_COLON === $this->nextSymbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
+        if (Lexer::T_COLON === $this->nextSymbol || self::$lexer->isNextToken(Lexer::T_INTEGER)) {
             $minutes = $this->match(Lexer::T_INTEGER);
 
             // Throw exception if minutes are greater than 60
@@ -291,7 +305,7 @@ class Parser
             $minutes = $minutes / 60;
 
             // If using colon and one doesn't follow value is done
-            if (Lexer::T_COLON === $this->nextSymbol && ! $this->lexer->isNextToken(Lexer::T_COLON)) {
+            if (Lexer::T_COLON === $this->nextSymbol && ! self::$lexer->isNextToken(Lexer::T_COLON)) {
                 return $minutes;
             }
 
@@ -306,7 +320,7 @@ class Parser
         }
 
         // If minutes is a float there will be no seconds
-        if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+        if (self::$lexer->isNextToken(Lexer::T_FLOAT)) {
             $minutes = $this->match(Lexer::T_FLOAT);
 
             // Throw exception if minutes are greater than 60
@@ -337,7 +351,7 @@ class Parser
     private function seconds()
     {
         // Seconds value can be an integer or float
-        if ($this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT))) {
+        if (self::$lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT))) {
             $seconds = $this->number();
 
             // Throw exception if seconds are greater than 60
@@ -370,12 +384,12 @@ class Parser
     private function number()
     {
         // If next token is a float match and return it
-        if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+        if (self::$lexer->isNextToken(Lexer::T_FLOAT)) {
             return $this->match(Lexer::T_FLOAT);
         }
 
         // If next token is an integer match and return it
-        if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
+        if (self::$lexer->isNextToken(Lexer::T_INTEGER)) {
             return $this->match(Lexer::T_INTEGER);
         }
 
@@ -395,7 +409,7 @@ class Parser
     {
         // If cardinal direction was not on previous coordinate it can be anything
         if (null === $this->nextCardinal) {
-            $this->nextCardinal = Lexer::T_CARDINAL_LON === $this->lexer->lookahead['type'] ? Lexer::T_CARDINAL_LON : Lexer::T_CARDINAL_LAT;
+            $this->nextCardinal = Lexer::T_CARDINAL_LON === self::$lexer->lookahead['type'] ? Lexer::T_CARDINAL_LON : Lexer::T_CARDINAL_LAT;
         }
 
         // Match cardinal direction
@@ -448,15 +462,15 @@ class Parser
     private function match($token)
     {
         // If next token isn't type specified throw error
-        if (! $this->lexer->isNextToken($token)) {
-            throw $this->syntaxError($this->lexer->getLiteral($token));
+        if (! self::$lexer->isNextToken($token)) {
+            throw $this->syntaxError(self::$lexer->getLiteral($token));
         }
 
         // Move lexer to next token
-        $this->lexer->moveNext();
+        self::$lexer->moveNext();
 
         // Return the token value
-        return $this->lexer->token['value'];
+        return self::$lexer->token['value'];
     }
 
     /**
@@ -469,8 +483,8 @@ class Parser
     private function syntaxError($expected)
     {
         $expected = sprintf('Expected %s, got', $expected);
-        $token    = $this->lexer->lookahead;
-        $found    = null === $this->lexer->lookahead ? 'end of string.' : sprintf('"%s"', $token['value']);
+        $token    = self::$lexer->lookahead;
+        $found    = null === self::$lexer->lookahead ? 'end of string.' : sprintf('"%s"', $token['value']);
 
         $message = sprintf(
             '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
