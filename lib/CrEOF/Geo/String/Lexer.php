@@ -48,11 +48,13 @@ class Lexer extends AbstractLexer
     const T_DEGREE       = 14;
 
     /**
-     * @param string $input
+     * @param string|null $input
      */
-    public function __construct($input)
+    public function __construct($input = null)
     {
-        $this->setInput($input);
+        if (null !== $input) {
+            $this->setInput($input);
+        }
     }
 
     /**
