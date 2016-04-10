@@ -4,7 +4,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Support for numbers in scientific notation.
 ### Changed
+- Parser constructor no longer requires a value enabling instance reuse.
+- Lexer constructor no longer requires a value enabling instance reuse.
+- Lexer instance used in Parser now a static var.
+- Tests now use Composer autoload.
+- PHPUnit XML now conformant.
+- Documentation updated with new usage pattern.
+### Removed
+- TestInit no longer needed
 
 ## [2.0.0] - 2015-11-18
 ### Added

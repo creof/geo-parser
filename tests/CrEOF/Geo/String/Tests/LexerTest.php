@@ -50,12 +50,57 @@ class LexerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testReusedLexer()
+    {
+        $lexer = new Lexer();
+
+        foreach ($this->testDataSource() as $data) {
+            $index = 0;
+
+            $lexer->setInput($data[0]);
+
+            while (null !== $actual = $lexer->peek()) {
+                $this->assertEquals($data[1][$index++], $actual);
+            }
+        }
+    }
+
     /**
      * @return array[]
      */
     public function testDataSource()
     {
         return array (
+            array(
+                '15',
+                array(
+                    array('value' => 15, 'type' => Lexer::T_INTEGER, 'position' => 0),
+                )
+            ),
+            array(
+                '1E5',
+                array(
+                    array('value' => 100000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                '1e5',
+                array(
+                    array('value' => 100000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                '1.5E5',
+                array(
+                    array('value' => 150000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                '1E-5',
+                array(
+                    array('value' => 0.00001, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
             array(
                 '40° 26\' 46" N',
                 array(

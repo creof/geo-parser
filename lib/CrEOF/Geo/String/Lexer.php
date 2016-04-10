@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2015 Derek J. Lambert
+ * Copyright (C) 2016 Derek J. Lambert
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,11 +48,13 @@ class Lexer extends AbstractLexer
     const T_DEGREE       = 14;
 
     /**
-     * @param string $input
+     * @param string|null $input
      */
-    public function __construct($input)
+    public function __construct($input = null)
     {
-        $this->setInput($input);
+        if (null !== $input) {
+            $this->setInput($input);
+        }
     }
 
     /**
@@ -64,15 +66,13 @@ class Lexer extends AbstractLexer
     {
         switch (true) {
             case (is_numeric($value)):
-                if (false !== strpos($value, '.')) {
-                    $value = (float) $value;
+                $value += 0;
 
-                    return self::T_FLOAT;
+                if (is_int($value)) {
+                    return self::T_INTEGER;
                 }
 
-                $value = (int) $value;
-
-                return self::T_INTEGER;
+                return self::T_FLOAT;
             case (':' === $value):
                 return self::T_COLON;
             case ('\'' === $value):
