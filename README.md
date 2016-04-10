@@ -84,7 +84,7 @@ Both single values and pairs are supported. Some samples of supported formats ar
  * 99:58:56 W
  * 44:58:53.9 N
 
-8. Two of any one format separated by space(s)
+8. Two of any one format separated by whitespace
 
 9. Two of any one format separated by a comma
 
