@@ -8,10 +8,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Parser constructor no longer requires a value enabling instance reuse.
 - Lexer constructor no longer requires a value enabling instance reuse.
-- Lexer instance used in Parser now a static var.
 - Tests now use Composer autoload.
 - PHPUnit XML now conformant.
 - Documentation updated with new usage pattern.
+- Move non-value comparison into if statement in Lexer::getType().
+- Test case and test data cleanup.
 ### Removed
 - TestInit no longer needed
 
