@@ -64,36 +64,38 @@ class Lexer extends AbstractLexer
      */
     protected function getType(&$value)
     {
-        switch (true) {
-            case (is_numeric($value)):
-                $value += 0;
+        if (is_numeric($value)) {
+            $value += 0;
 
-                if (is_int($value)) {
-                    return self::T_INTEGER;
-                }
+            if (is_int($value)) {
+                return self::T_INTEGER;
+            }
 
-                return self::T_FLOAT;
-            case (':' === $value):
+            return self::T_FLOAT;
+        }
+
+        switch ($value) {
+            case ':':
                 return self::T_COLON;
-            case ('\'' === $value):
-            case ("\xe2\x80\xb2" === $value): // prime
+            case '\'':
+            case "\xe2\x80\xb2": // prime
                 return self::T_APOSTROPHE;
-            case ('"' === $value):
-            case ("\xe2\x80\xb3" === $value): // double prime
+            case '"':
+            case "\xe2\x80\xb3": // double prime
                 return self::T_QUOTE;
-            case (',' === $value):
+            case ',':
                 return self::T_COMMA;
-            case ('-' === $value):
+            case '-':
                 return self::T_MINUS;
-            case ('+' === $value):
+            case '+':
                 return self::T_PLUS;
-            case ('°' === $value):
+            case '°':
                 return self::T_DEGREE;
-            case ('N' === strtoupper($value)):
-            case ('S' === strtoupper($value)):
+            case 'N':
+            case 'S':
                 return self::T_CARDINAL_LAT;
-            case ('E' === strtoupper($value)):
-            case ('W' === strtoupper($value)):
+            case 'E':
+            case 'W':
                 return self::T_CARDINAL_LON;
             default:
                 return self::T_NONE;
