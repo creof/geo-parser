@@ -203,6 +203,16 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                     array('value' => 79.553, 'type' => Lexer::T_FLOAT, 'position' => 11),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 17),
                 )
+            ),
+            array(
+                'input'          => "40.4738° \t -79.553°",
+                'expectedTokens' => array(
+                    array('value' => 40.4738, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                    array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 7),
+                    array('value' => '-', 'type' => Lexer::T_MINUS, 'position' => 12),
+                    array('value' => 79.553, 'type' => Lexer::T_FLOAT, 'position' => 13),
+                    array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 19),
+                )
             )
         );
     }
