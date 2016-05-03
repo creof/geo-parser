@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2015 Derek J. Lambert
+ * Copyright (C) 2016 Derek J. Lambert
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,11 +42,6 @@ class Parser
     private $input;
 
     /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
      * @var int
      */
     private $nextCardinal;
@@ -57,27 +52,44 @@ class Parser
     private $nextSymbol;
 
     /**
+     * @var Lexer
+     */
+    private $lexer;
+
+    /**
      * Constructor
      *
      * Setup up instance properties
      *
-     * @param string $input
+     * @param string|null $input
      */
-    public function __construct($input)
+    public function __construct($input = null)
     {
-        // Save input string for use in messages
-        $this->input = $input;
-        // Create new Lexer and tokenize input string
-        $this->lexer = new Lexer($input);
+        $this->lexer = new Lexer();
+
+        if (null !== $input) {
+            $this->input = $input;
+        }
     }
 
     /**
      * Parse input string
      *
+     * @param string|null $input
+     *
      * @return float|int|array
      */
-    public function parse()
+    public function parse($input = null)
     {
+        if (null !== $input) {
+            $this->input = $input;
+        }
+
+        $this->nextCardinal = null;
+        $this->nextSymbol   = null;
+
+        $this->lexer->setInput($this->input);
+
         // Move Lexer to first token
         $this->lexer->moveNext();
 
@@ -315,7 +327,7 @@ class Parser
             }
 
             // Get fractional minutes
-            $minutes = $minutes / 60;
+            $minutes /= 60;
 
             // Match minutes symbol
             $this->symbol();
@@ -346,7 +358,7 @@ class Parser
             }
 
             // Get fractional seconds
-            $seconds = $seconds / 3600;
+            $seconds /= 3600;
 
             // Match seconds symbol if requirement not colon
             if (Lexer::T_COLON !== $this->nextSymbol) {
@@ -430,7 +442,7 @@ class Parser
 
         // Throw exception if value is out of range
         if ($value > $range) {
-            throw $this->rangeError('Degrees', $range, (-1 * $range));
+            throw $this->rangeError('Degrees', $range, -1 * $range);
         }
 
         // Return value with sign

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014 Derek J. Lambert
+ * Copyright (C) 2016 Derek J. Lambert
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,18 +35,34 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $input
-     * @param array  $tokens
+     * @param array  $expectedTokens
      *
      * @dataProvider testDataSource
      */
-    public function testLexer($input, array $tokens)
+    public function testLexer($input, array $expectedTokens)
     {
         $lexer = new Lexer($input);
-
         $index = 0;
 
         while (null !== $actual = $lexer->peek()) {
-            $this->assertEquals($tokens[$index++], $actual);
+            $this->assertEquals($expectedTokens[$index++], $actual);
+        }
+    }
+
+    public function testReusedLexer()
+    {
+        $lexer = new Lexer();
+
+        foreach ($this->testDataSource() as $data) {
+            $input          = $data['input'];
+            $expectedTokens = $data['expectedTokens'];
+            $index          = 0;
+
+            $lexer->setInput($input);
+
+            while (null !== $actual = $lexer->peek()) {
+                $this->assertEquals($expectedTokens[$index++], $actual);
+            }
         }
     }
 
@@ -57,8 +73,38 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     {
         return array (
             array(
-                '40° 26\' 46" N',
-                array(
+                'input'          => '15',
+                'expectedTokens' => array(
+                    array('value' => 15, 'type' => Lexer::T_INTEGER, 'position' => 0),
+                )
+            ),
+            array(
+                'input'          => '1E5',
+                'expectedTokens' => array(
+                    array('value' => 100000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                'input'          => '1e5',
+                'expectedTokens' => array(
+                    array('value' => 100000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                'input'          => '1.5E5',
+                'expectedTokens' => array(
+                    array('value' => 150000, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                'input'          => '1E-5',
+                'expectedTokens' => array(
+                    array('value' => 0.00001, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                )
+            ),
+            array(
+                'input'          => '40° 26\' 46" N',
+                'expectedTokens' => array(
                     array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 2),
                     array('value' => 26, 'type' => Lexer::T_INTEGER, 'position' => 5),
@@ -69,8 +115,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                '40° 26\' 46" N 79° 58\' 56" W',
-                array(
+                'input'          => '40° 26\' 46" N 79° 58\' 56" W',
+                'expectedTokens' => array(
                     array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 2),
                     array('value' => 26, 'type' => Lexer::T_INTEGER, 'position' => 5),
@@ -88,8 +134,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                '40°26\'46"N 79°58\'56"W',
-                array(
+                'input'          => '40°26\'46"N 79°58\'56"W',
+                'expectedTokens' => array(
                     array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 2),
                     array('value' => 26, 'type' => Lexer::T_INTEGER, 'position' => 4),
@@ -107,8 +153,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                '40°26\'46"N, 79°58\'56"W',
-                array(
+                'input'          => '40°26\'46"N, 79°58\'56"W',
+                'expectedTokens' => array(
                     array('value' => 40, 'type' => Lexer::T_INTEGER, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 2),
                     array('value' => 26, 'type' => Lexer::T_INTEGER, 'position' => 4),
@@ -127,8 +173,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                '40.4738° N, 79.553° W',
-                array(
+                'input'          => '40.4738° N, 79.553° W',
+                'expectedTokens' => array(
                     array('value' => 40.4738, 'type' => Lexer::T_FLOAT, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 7),
                     array('value' => 'N', 'type' => Lexer::T_CARDINAL_LAT, 'position' => 10),
@@ -139,8 +185,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                '40.4738°, 79.553°',
-                array(
+                'input'          => '40.4738°, 79.553°',
+                'expectedTokens' => array(
                     array('value' => 40.4738, 'type' => Lexer::T_FLOAT, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 7),
                     array('value' => ',', 'type' => Lexer::T_COMMA, 'position' => 9),
@@ -149,13 +195,23 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                '40.4738° -79.553°',
-                array(
+                'input'          => '40.4738° -79.553°',
+                'expectedTokens' => array(
                     array('value' => 40.4738, 'type' => Lexer::T_FLOAT, 'position' => 0),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 7),
                     array('value' => '-', 'type' => Lexer::T_MINUS, 'position' => 10),
                     array('value' => 79.553, 'type' => Lexer::T_FLOAT, 'position' => 11),
                     array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 17),
+                )
+            ),
+            array(
+                'input'          => "40.4738° \t -79.553°",
+                'expectedTokens' => array(
+                    array('value' => 40.4738, 'type' => Lexer::T_FLOAT, 'position' => 0),
+                    array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 7),
+                    array('value' => '-', 'type' => Lexer::T_MINUS, 'position' => 12),
+                    array('value' => 79.553, 'type' => Lexer::T_FLOAT, 'position' => 13),
+                    array('value' => '°', 'type' => Lexer::T_DEGREE, 'position' => 19),
                 )
             )
         );

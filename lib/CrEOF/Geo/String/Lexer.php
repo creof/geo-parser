@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2015 Derek J. Lambert
+ * Copyright (C) 2016 Derek J. Lambert
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,11 +48,13 @@ class Lexer extends AbstractLexer
     const T_DEGREE       = 14;
 
     /**
-     * @param string $input
+     * @param string|null $input
      */
-    public function __construct($input)
+    public function __construct($input = null)
     {
-        $this->setInput($input);
+        if (null !== $input) {
+            $this->setInput($input);
+        }
     }
 
     /**
@@ -62,38 +64,38 @@ class Lexer extends AbstractLexer
      */
     protected function getType(&$value)
     {
-        switch (true) {
-            case (is_numeric($value)):
-                if (false !== strpos($value, '.')) {
-                    $value = (float) $value;
+        if (is_numeric($value)) {
+            $value += 0;
 
-                    return self::T_FLOAT;
-                }
-
-                $value = (int) $value;
-
+            if (is_int($value)) {
                 return self::T_INTEGER;
-            case (':' === $value):
+            }
+
+            return self::T_FLOAT;
+        }
+
+        switch ($value) {
+            case ':':
                 return self::T_COLON;
-            case ('\'' === $value):
-            case ("\xe2\x80\xb2" === $value): // prime
+            case '\'':
+            case "\xe2\x80\xb2": // prime
                 return self::T_APOSTROPHE;
-            case ('"' === $value):
-            case ("\xe2\x80\xb3" === $value): // double prime
+            case '"':
+            case "\xe2\x80\xb3": // double prime
                 return self::T_QUOTE;
-            case (',' === $value):
+            case ',':
                 return self::T_COMMA;
-            case ('-' === $value):
+            case '-':
                 return self::T_MINUS;
-            case ('+' === $value):
+            case '+':
                 return self::T_PLUS;
-            case ('°' === $value):
+            case '°':
                 return self::T_DEGREE;
-            case ('N' === strtoupper($value)):
-            case ('S' === strtoupper($value)):
+            case 'N':
+            case 'S':
                 return self::T_CARDINAL_LAT;
-            case ('E' === strtoupper($value)):
-            case ('W' === strtoupper($value)):
+            case 'E':
+            case 'W':
                 return self::T_CARDINAL_LON;
             default:
                 return self::T_NONE;

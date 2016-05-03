@@ -4,15 +4,31 @@
 [![Test Coverage](https://codeclimate.com/github/creof/geo-parser/badges/coverage.svg)](https://codeclimate.com/github/creof/geo-parser/coverage)
 [![Build Status](https://travis-ci.org/creof/geo-parser.svg)](https://travis-ci.org/creof/geo-parser)
 
-Lexer and parser library for geometric and geographic string values.
+Lexer and parser library for geometric and geographic point string values.
 
 ## Usage
-Pass value to be parsed in the constructor, then call parse() on the created object.
+
+There are two use patterns for the parser. The value to be parsed can be passed into the constructor, then parse()
+called on the returned ```Parser``` object:
 
 ```php
 $input  = '79°56′55″W, 40°26′46″N';
+
 $parser = new Parser($input);
-$value  = $parser->parse();
+
+$value = $parser->parse();
+```
+
+If many values need to be parsed, a single ```Parser``` instance can be used:
+
+```php
+$input1 = '56.242 E';
+$input2 = '40:26:46 S';
+
+$parser = new Parser();
+
+$value1 = $parser->parse($input1);
+$value2 = $parser->parse($input2);
 ```
 
 ## Supported Formats
@@ -68,10 +84,14 @@ Both single values and pairs are supported. Some samples of supported formats ar
  * 99:58:56 W
  * 44:58:53.9 N
 
-8. Two of any one format separated by space(s)
+8. Two of any one format separated by whitespace
 
 9. Two of any one format separated by a comma
 
 ## Return
 
 The parser will return a integer/float or an array containing a pair of these values.
+
+## Exceptions
+
+The ```Lexer``` and ```Parser``` will throw exceptions implementing interface ```CrEOF\Geo\String\Exception\ExceptionInterface```.
