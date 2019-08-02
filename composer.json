@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "require": {
-    "php": ">=5.3.3",
+    "php": ">=5.6",
     "ext-SPL": "*",
     "doctrine/lexer": ">=1.0"
   },
