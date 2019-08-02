@@ -33,26 +33,26 @@ use Doctrine\Common\Lexer\AbstractLexer;
  */
 class Lexer extends AbstractLexer
 {
-    const T_NONE         = 1;
-    const T_INTEGER      = 2;
-    const T_FLOAT        = 4;
+    const T_NONE = 1;
+    const T_INTEGER = 2;
+    const T_FLOAT = 4;
     const T_CARDINAL_LAT = 5;
     const T_CARDINAL_LON = 6;
-    const T_COMMA        = 7;
-    const T_PLUS         = 8;
-    const T_MINUS        = 9;
-    const T_PERIOD       = 10;
-    const T_COLON        = 11;
-    const T_APOSTROPHE   = 12;
-    const T_QUOTE        = 13;
-    const T_DEGREE       = 14;
+    const T_COMMA = 7;
+    const T_PLUS = 8;
+    const T_MINUS = 9;
+    const T_PERIOD = 10;
+    const T_COLON = 11;
+    const T_APOSTROPHE = 12;
+    const T_QUOTE = 13;
+    const T_DEGREE = 14;
 
     /**
      * @param string|null $input
      */
-    public function __construct($input = null)
+    public function __construct($input = NULL)
     {
-        if (null !== $input) {
+        if (NULL !== $input) {
             $this->setInput($input);
         }
     }
@@ -108,7 +108,7 @@ class Lexer extends AbstractLexer
     protected function getCatchablePatterns()
     {
         return array(
-            '[nesw\'",\X]',
+            '[nesw\'",]',
             '(?:[0-9]+)(?:[\.][0-9]+)?(?:e[+-]?[0-9]+)?'
         );
     }
