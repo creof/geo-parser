@@ -1,32 +1,42 @@
 {
-    "name": "creof/geo-parser",
-    "type": "library",
-    "description": "Parser for geography coordinate strings",
-    "keywords": ["parser", "lexer", "string", "text", "geometry", "geography", "spatial", "geo", "coordinate"],
-    "authors": [
-        {
-            "name":  "Derek J. Lambert",
-            "email": "dlambert@dereklambert.com"
-        }
-    ],
-    "license": "MIT",
-    "require": {
-        "php":            ">=5.3.3",
-        "ext-SPL":        "*",
-        "doctrine/lexer": ">=1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit":               ">=4.8",
-        "codeclimate/php-test-reporter": "dev-master"
-    },
-    "autoload": {
-        "psr-0": {
-            "CrEOF\\Geo\\String": "lib/"
-        }
-    },
-    "autoload-dev": {
-        "psr-0": {
-            "CrEOF\\Geo\\String\\Tests": "tests/"
-        }
+  "name": "agencelimitless/geo-parser",
+  "type": "library",
+  "description": "Parser for geography coordinate strings",
+  "keywords": [
+    "parser",
+    "lexer",
+    "string",
+    "text",
+    "geometry",
+    "geography",
+    "spatial",
+    "geo",
+    "coordinate"
+  ],
+  "authors": [
+    {
+      "name": "Derek J. Lambert",
+      "email": "dlambert@dereklambert.com"
     }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.3.3",
+    "ext-SPL": "*",
+    "doctrine/lexer": ">=1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=4.8",
+    "codeclimate/php-test-reporter": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "CrEOF\\Geo\\String": "lib/"
+    }
+  },
+  "autoload-dev": {
+    "psr-0": {
+      "CrEOF\\Geo\\String\\Tests": "tests/"
+    }
+  }
 }
