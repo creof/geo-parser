@@ -9,6 +9,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 
+## [2.2.0] - 2019-08-06
+### Added
+- Support for PHP 7.1 thru 7.3
+
+### Removed
+- Support for PHP earlier than 7.1 
+
 ## [2.1.0] - 2016-05-03
 ### Added
 - Support for numbers in scientific notation.
