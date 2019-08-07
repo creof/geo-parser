@@ -68,7 +68,7 @@ class Parser
         $this->lexer = new Lexer();
 
         if (null !== $input) {
-            $this->input = $input;
+            $this->input = (string) $input;
         }
     }
 
@@ -82,7 +82,7 @@ class Parser
     public function parse($input = null)
     {
         if (null !== $input) {
-            $this->input = $input;
+            $this->input = (string) $input;
         }
 
         $this->nextCardinal = null;

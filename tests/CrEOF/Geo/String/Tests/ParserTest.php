@@ -85,6 +85,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
+                'input'    => 40,
+                'expected' => 40
+            ),
+            array(
                 'input'    => '40',
                 'expected' => 40
             ),
