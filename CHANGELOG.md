@@ -9,6 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 
+## [2.2.1] - 2019-08-07
+### Changed
+- Fix compatibility with doctrine/lexer 1.1.0. PR [#18](https://github.com/creof/geo-parser/pull/18) by [bcremer](https://github.com/bcremer).
+
 ## [2.2.0] - 2019-08-06
 ### Added
 - Support for PHP 7.1 thru 7.3
