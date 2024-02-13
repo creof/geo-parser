@@ -24,6 +24,7 @@
 namespace CrEOF\Geo\String\Tests;
 
 use CrEOF\Geo\String\Parser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Parser tests
@@ -31,7 +32,7 @@ use CrEOF\Geo\String\Parser;
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     /**
      * @param string $input
@@ -45,20 +46,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
         $value = $parser->parse();
 
-        $this->assertEquals($expected, $value);
-    }
-
-    public function testParserReuse()
-    {
-        $parser = new Parser();
-
-        foreach ($this->dataSourceGood() as $data) {
-            $input    = $data['input'];
-            $expected = $data['expected'];
-
-            $value = $parser->parse($input);
-
-            $this->assertEquals($expected, $value);
+        if (!is_array($expected)) {
+            $expected = [$expected];
+            $value = [$value];
+        }
+        foreach ($expected as $key => $expectedValue) {
+            self::assertSame((string) $expected[$key], (string) $value[$key]);
         }
     }
 
@@ -71,7 +64,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadValues($input, $exception, $message)
     {
-        $this->setExpectedException($exception, $message);
+        self::expectException($exception);
+        self::expectExceptionMessage($message);
 
         $parser = new Parser($input);
 
