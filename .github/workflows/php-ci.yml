@@ -1,0 +1,33 @@
+name: PHP CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    name: "PHP Tests"
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: [ 8.1, 8.2, 8.3 ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer --prefer-source install
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit -v

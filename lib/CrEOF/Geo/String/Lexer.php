@@ -62,7 +62,7 @@ class Lexer extends AbstractLexer
      *
      * @return int
      */
-    protected function getType(&$value)
+    protected function getType(string &$value)
     {
         if (is_numeric($value)) {
             $value += 0;
@@ -70,6 +70,8 @@ class Lexer extends AbstractLexer
             if (is_int($value)) {
                 return self::T_INTEGER;
             }
+
+            $value = rtrim(sprintf('%.8F', $value), '0');
 
             return self::T_FLOAT;
         }
